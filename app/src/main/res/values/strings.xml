@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NexusKit</string>
+
+    <!-- Search -->
+    <string name="search_hint">Search tools, convert units, calculate…</string>
+    <string name="search_no_results">No results for \"%s\"</string>
+
+    <!-- Home -->
+    <string name="section_favourites">Favourites</string>
+    <string name="favourites_empty_hint">Long press any tool to add it to favourites</string>
+    <string name="rearrange_hint">Tap and hold to drag</string>
+
+    <!-- Tool actions -->
+    <string name="action_info">Info</string>
+    <string name="action_favourite">Favourite</string>
+    <string name="action_unfavourite">Remove from Favourites</string>
+    <string name="action_hide">Hide</string>
+    <string name="action_move">Move</string>
+
+    <!-- Drawer -->
+    <string name="drawer_title">Tools</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_search_hint">Search settings…</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_headline">Everything you need.\nIn one place.</string>
+    <string name="onboarding_subtitle">NexusKit brings powerful utilities together in a single, beautifully customizable app.</string>
+    <string name="onboarding_cta">Get Started</string>
+
+    <!-- General -->
+    <string name="close">Close</string>
+    <string name="done">Done</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <!-- Widgets -->
+    <string name="widget_quick_tools_desc">Quick access to your most used NexusKit tools</string>
+    <string name="widget_quick_bar_desc">Compact quick launcher bar for NexusKit tools</string>
+</resources>

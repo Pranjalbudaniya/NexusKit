@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- All color values are defined in Theme Spec (Color.kt + this file).
+         DO NOT add any color values here until Theme Spec is written.
+         This file exists only so the build references it without error. -->
+</resources>

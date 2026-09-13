@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Compose owns all runtime theming. This style ONLY controls the window
+        chrome (status bar, nav bar background) before Compose draws its first frame.
+        NexusKitTheme in Compose takes over completely after launch.
+    -->
+    <style name="Theme.NexusKit" parent="android:Theme.Material.NoActionBar">
+        <!-- Transparent so edge-to-edge Compose content draws immediately.
+             Compose SplashScreen handles its own background colour — see Spec 13. -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

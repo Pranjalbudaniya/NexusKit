@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_bar_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@drawable/widget_background"
+    android:gravity="center_vertical"
+    android:padding="8dp">
+
+    <!-- Search / Home Button -->
+    <LinearLayout
+        android:id="@+id/btn_bar_search"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.3"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/widget_search_bg"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_marginEnd="6dp">
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_widget_search"
+            android:tint="#CCCCCC" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NexusKit"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginStart="6dp" />
+    </LinearLayout>
+
+    <!-- Calc -->
+    <LinearLayout
+        android:id="@+id/btn_bar_calc"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/widget_button_bg"
+        android:layout_marginEnd="4dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_widget_calc"
+            android:tint="#4FC3F7" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calc"
+            android:textColor="#EEEEEE"
+            android:textSize="9sp" />
+    </LinearLayout>
+
+    <!-- Morse / Flashlight -->
+    <LinearLayout
+        android:id="@+id/btn_bar_flashlight"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/widget_button_bg"
+        android:layout_marginEnd="4dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_widget_flashlight"
+            android:tint="#FFD54F" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Light"
+            android:textColor="#EEEEEE"
+            android:textSize="9sp" />
+    </LinearLayout>
+
+    <!-- Stopwatch -->
+    <LinearLayout
+        android:id="@+id/btn_bar_stopwatch"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/widget_button_bg"
+        android:layout_marginEnd="4dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_widget_stopwatch"
+            android:tint="#FF8A65" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Timer"
+            android:textColor="#EEEEEE"
+            android:textSize="9sp" />
+    </LinearLayout>
+
+    <!-- Notes -->
+    <LinearLayout
+        android:id="@+id/btn_bar_notes"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/widget_button_bg">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_widget_notes"
+            android:tint="#BA68C8" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notes"
+            android:textColor="#EEEEEE"
+            android:textSize="9sp" />
+    </LinearLayout>
+
+</LinearLayout>
