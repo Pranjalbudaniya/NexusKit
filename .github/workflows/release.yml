@@ -1,0 +1,94 @@
+name: Release Build & Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Split Release APKs
+        run: ./gradlew assembleRelease --stacktrace
+
+      - name: Prepare APK Artifacts
+        run: |
+          mkdir -p release-artifacts
+          cp app/build/outputs/apk/release/app-arm64-v8a-release.apk release-artifacts/NexusKit-${{ github.ref_name }}-arm64-v8a.apk
+          cp app/build/outputs/apk/release/app-armeabi-v7a-release.apk release-artifacts/NexusKit-${{ github.ref_name }}-armeabi-v7a.apk
+          cp app/build/outputs/apk/release/app-x86_64-release.apk release-artifacts/NexusKit-${{ github.ref_name }}-x86_64.apk
+          cp app/build/outputs/apk/release/app-x86-release.apk release-artifacts/NexusKit-${{ github.ref_name }}-x86.apk
+          cp app/build/outputs/apk/release/app-universal-release.apk release-artifacts/NexusKit-${{ github.ref_name }}-universal.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: NexusKit ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+          body: |
+            ## 🌟 NexusKit ${{ github.ref_name }} — All-in-One Offline Utility Suite
+
+            > **Every tool you need, zero internet required.**
+            > 20+ specialized tool suites, 100% offline functionality, zero telemetry, zero background battery drain, and deep Material 3 customization.
+
+            ---
+
+            ### 🛠️ What's Included
+            - **Text & Developer Suite**: Case converter, slugifier, regex tester, JSON prettifier & validator, Base64/Hex/URL encoders, and live character/word analyzer.
+            - **Security & Privacy**: Cryptographically secure offline password generator with entropy scoring, customizable character subsets, and security recommendations.
+            - **Smart Math & Financial Calculators**: Percentage calculators, discount calculators, unit converters (Length, Weight, Temp, Storage, Speed, Pressure, Power, Energy), and loan EMI calculators with amortization breakdown.
+            - **Live Flashlight & Morse Transmitter**: Camera LED torch, screen beacon, SOS mode, and an interactive **Text-to-Morse engine** with synchronized LED flashing, screen strobe, 800Hz synthesized audio, and haptic feedback.
+            - **QR Code Studio**: Fully offline vector QR code generator with instant PNG export and customizable error correction.
+            - **Science & Education**: Interactive Periodic Table of Elements, Physics Constants reference, and Unit & Conversion formula cheat sheets.
+            - **Health & Fitness**: BMI / BMR calculator, daily water intake planner, and target heart rate zone estimator.
+            - **Productivity & Time**: World Clock with multiple timezones, precision stopwatch with lap logging, and lightweight offline markdown text editor.
+
+            ### 📱 Ultra-Lightweight Android Widgets
+            - **4x2 Quick Tools Grid**: Instant 1-tap launcher for Flashlight, QR Generator, Password Creator, Unit Converter, Notes, Calculator, Stopwatch, and BMI.
+            - **4x1 Quick Search & Utility Bar**: System search trigger and quick access bar.
+            - *Designed with zero background workers or polling services for 0% standby battery consumption.*
+
+            ### 🎨 Deep Theming & Personalization
+            - **Full Material 3 Dynamic Engine**: 7 curated aesthetic themes + Dynamic Monet wallpaper theming.
+            - **Live Typography Engine**: Real-time font switching across Inter, Roboto, Outfit, JetBrains Mono, Space Grotesk, Poppins, and Fira Code.
+            - **Adaptive Card Shapes**: Switch between Round, Squircle, Rounded Square, and Sharp corner styles.
+            - **Curated Favorites & Drawer Navigation**: Pin favorite tools for 1-tap launch.
+
+            ---
+
+            ### 📦 Download the APK for your Device
+            Choose the split APK matching your device CPU architecture below (or universal if unsure):
+            - **`NexusKit-${{ github.ref_name }}-arm64-v8a.apk`** — Recommended for 99% of modern Android phones.
+            - **`NexusKit-${{ github.ref_name }}-armeabi-v7a.apk`** — For older 32-bit Android phones.
+            - **`NexusKit-${{ github.ref_name }}-x86_64.apk`** — For Intel/AMD emulators & Chromebooks.
+            - **`NexusKit-${{ github.ref_name }}-x86.apk`** — For 32-bit x86 emulators.
+            - **`NexusKit-${{ github.ref_name }}-universal.apk`** — Universal build compatible with all devices.
+
+            ---
+
+            ### 🔒 Privacy & Permissions
+            - **Zero Internet Permission**: No `android.permission.INTERNET` requested.
+            - **Local Data Storage**: All data stays 100% on your device via Room SQLite & DataStore.
+          files: |
+            release-artifacts/*.apk
