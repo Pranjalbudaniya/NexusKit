@@ -46,7 +46,9 @@ import androidx.compose.material.icons.filled.DirectionsRun
 import androidx.compose.material.icons.filled.EnhancedEncryption
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Science
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.TaskAlt
+import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /**
@@ -89,6 +91,8 @@ val iconMap: Map<String, ImageVector> = mapOf(
     "TaskAlt"            to Icons.Filled.TaskAlt,
     "AssignmentTurnedIn" to Icons.Filled.AssignmentTurnedIn,
     "CompareArrows"      to Icons.Filled.CompareArrows,
+    "TrendingUp"         to Icons.Filled.TrendingUp,
+    "Security"           to Icons.Filled.Security,
 
     // ── Categories ─────────────────────────────────────────────────────────
     "Build"              to Icons.Filled.Build,

@@ -92,6 +92,15 @@ object ToolRegistry {
             route          = "tool/loan_calculator",
             searchKeywords = listOf("loan", "emi", "interest", "mortgage", "finance", "bank", "principal", "monthly")
         ),
+        ToolInfo(
+            id             = "sip_calculator",
+            name           = "SIP Calculator",
+            description    = "Calculate mutual fund SIP & lump sum returns, maturity value and growth schedule",
+            iconName       = "TrendingUp",
+            categoryId     = "number_maths",
+            route          = "tool/sip_calculator",
+            searchKeywords = listOf("sip", "investment", "mutual fund", "lumpsum", "returns", "wealth", "interest", "finance", "savings")
+        ),
 
         // ── CONVERTERS ────────────────────────────────────────────────────────
         ToolInfo(
@@ -243,6 +252,15 @@ object ToolRegistry {
             categoryId     = "utilities",
             route          = "tool/reference_sheets",
             searchKeywords = listOf("reference", "markdown", "ascii", "unicode", "http", "nato", "cheat sheet", "paper sizes")
+        ),
+        ToolInfo(
+            id             = "encryption_tool",
+            name           = "Encryption & Decoder",
+            description    = "Encrypt and decrypt with AES, DES, Caesar, Vigenère, Base64, Hex, Binary and Morse code",
+            iconName       = "Security",
+            categoryId     = "utilities",
+            route          = "tool/encryption_tool",
+            searchKeywords = listOf("encrypt", "decrypt", "cipher", "aes", "des", "caesar", "vigenere", "base64", "hex", "binary", "morse", "security", "decode", "encode")
         )
     )
 

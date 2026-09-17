@@ -43,6 +43,8 @@ object NavRoutes {
     const val TOOL_HEALTH_FITNESS      = "tool/health_fitness"
     const val TOOL_PRODUCTIVITY_SUITE  = "tool/productivity_suite"
     const val TOOL_REFERENCE_SHEETS    = "tool/reference_sheets"
+    const val TOOL_SIP_CALCULATOR      = "tool/sip_calculator"
+    const val TOOL_ENCRYPTION          = "tool/encryption_tool"
 
     // ── Route builders ────────────────────────────────────────────────────────
 

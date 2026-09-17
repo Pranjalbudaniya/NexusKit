@@ -30,6 +30,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nexuskit.app.R
@@ -125,6 +126,7 @@ private fun ShapePickerCell(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .aspectRatio(1f)
+            .clipToBounds()
             .clickable(onClick = onClick)
     ) {
         Surface(
@@ -134,7 +136,7 @@ private fun ShapePickerCell(
             else
                 MaterialTheme.colorScheme.surfaceVariant,
             modifier = Modifier
-                .size(44.dp)
+                .size(42.dp)
                 .then(
                     if (isSelected) Modifier.border(
                         width = 2.dp,

@@ -39,9 +39,9 @@ fun CardShapeType.toComposeShape(): Shape = when (this) {
     // ── Circles & Ovals ───────────────────────────────────────────────────────
     CardShapeType.CIRCLE              -> CircleShape
     CardShapeType.SQUIRCLE            -> squircleShape()
-    CardShapeType.CIRCLE_FLAT         -> ovalShape(widthRatio = 1.2f, heightRatio = 0.85f)
+    CardShapeType.CIRCLE_FLAT         -> ovalShape(widthRatio = 1.0f, heightRatio = 0.78f)
     CardShapeType.OVAL_VERTICAL       -> ovalShape(widthRatio = 0.75f, heightRatio = 1f)
-    CardShapeType.OVAL_HORIZONTAL     -> ovalShape(widthRatio = 1f, heightRatio = 0.7f)
+    CardShapeType.OVAL_HORIZONTAL     -> ovalShape(widthRatio = 1f, heightRatio = 0.72f)
     CardShapeType.STADIUM             -> RoundedCornerShape(50)
 
     // ── Regular Polygons ──────────────────────────────────────────────────────
@@ -49,10 +49,10 @@ fun CardShapeType.toComposeShape(): Shape = when (this) {
     CardShapeType.HEXAGON             -> regularPolygon(6, 0f)
     CardShapeType.HEXAGON_FLAT        -> regularPolygon(6, -PI.toFloat() / 2)
     CardShapeType.HEPTAGON            -> regularPolygon(7, -PI.toFloat() / 2)
-    CardShapeType.HEPTAGON_THIN       -> regularPolygon(7, -PI.toFloat() / 2)
+    CardShapeType.HEPTAGON_THIN       -> scaledPolygon(7, -PI.toFloat() / 2, scaleX = 0.78f, scaleY = 1f)
     CardShapeType.DIAMOND             -> regularPolygon(4, 0f)
-    CardShapeType.THIN_DIAMOND        -> stretchedDiamond(0.5f)
-    CardShapeType.THIN_OCTAGON        -> regularPolygon(8, 0f)
+    CardShapeType.THIN_DIAMOND        -> stretchedDiamond(0.52f)
+    CardShapeType.THIN_OCTAGON        -> scaledPolygon(8, (PI / 8).toFloat(), scaleX = 0.78f, scaleY = 1f)
 
     // ── Stars & Scallops ──────────────────────────────────────────────────────
     CardShapeType.SCALLOP_4           -> scallop(4, depth = 0.15f)
@@ -65,16 +65,16 @@ fun CardShapeType.toComposeShape(): Shape = when (this) {
     CardShapeType.STARBURST_SHARP     -> starShape(12, innerRatio = 0.45f)
     CardShapeType.STARBURST_ROUND     -> starShape(12, innerRatio = 0.60f)
     CardShapeType.SUNFLOWER           -> starShape(20, innerRatio = 0.85f)
-    CardShapeType.CROSS_PIXEL         -> plusShape(armRatio = 0.30f)
+    CardShapeType.CROSS_PIXEL         -> pixelCrossShape()
 
     // ── Floral ────────────────────────────────────────────────────────────────
-    CardShapeType.FLOWER_4            -> petalFlower(4)
-    CardShapeType.FLOWER_ROUND        -> petalFlower(5)
-    CardShapeType.CLOVER              -> petalFlower(4, overlap = 0.4f)
-    CardShapeType.CLOVER_ROUND        -> petalFlower(4, overlap = 0.35f)
-    CardShapeType.LOTUS               -> petalFlower(8, overlap = 0.3f)
-    CardShapeType.SAKURA              -> petalFlower(5, overlap = 0.25f)
-    CardShapeType.CLOUD               -> cloudShape(bumps = 5)
+    CardShapeType.FLOWER_4            -> polarFlower(lobes = 4, baseRatio = 0.68f, amplitude = 0.28f, power = 2.0f, rotation = (PI / 4).toFloat())
+    CardShapeType.FLOWER_ROUND        -> polarFlower(lobes = 5, baseRatio = 0.74f, amplitude = 0.22f, power = 1.2f)
+    CardShapeType.CLOVER              -> polarFlower(lobes = 4, baseRatio = 0.70f, amplitude = 0.26f, power = 1.6f, rotation = 0f)
+    CardShapeType.CLOVER_ROUND        -> polarFlower(lobes = 4, baseRatio = 0.76f, amplitude = 0.20f, power = 1.2f, rotation = 0f)
+    CardShapeType.LOTUS               -> polarFlower(lobes = 8, baseRatio = 0.70f, amplitude = 0.26f, power = 1.4f)
+    CardShapeType.SAKURA              -> polarFlower(lobes = 5, baseRatio = 0.72f, amplitude = 0.24f, power = 1.5f)
+    CardShapeType.CLOUD               -> cloudShape()
     CardShapeType.SPEECH_BUBBLE       -> speechBubbleShape()
 
     // ── Special Silhouettes ───────────────────────────────────────────────────
@@ -203,8 +203,27 @@ private fun ovalShape(widthRatio: Float, heightRatio: Float): Shape =
         }
     }
 
+/** Regular convex polygon with sides, optionally scaled on X or Y axis. */
+private fun scaledPolygon(sides: Int, startAngle: Float = 0f, scaleX: Float = 1f, scaleY: Float = 1f): Shape =
+    object : Shape {
+        override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
+            val cx = size.width / 2f
+            val cy = size.height / 2f
+            val r  = min(cx, cy)
+            val path = Path()
+            for (i in 0 until sides) {
+                val angle = startAngle + (2 * PI * i / sides).toFloat()
+                val x = cx + r * scaleX * cos(angle)
+                val y = cy + r * scaleY * sin(angle)
+                if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
+            }
+            path.close()
+            return Outline.Generic(path)
+        }
+    }
+
 /** Diamond rotated and optionally stretched. */
-private fun stretchedDiamond(widthRatio: Float = 0.6f): Shape =
+private fun stretchedDiamond(widthRatio: Float = 0.52f): Shape =
     object : Shape {
         override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
             val cx = size.width / 2f
@@ -245,49 +264,84 @@ private fun plusShape(armRatio: Float = 0.35f): Shape =
         }
     }
 
-/** Petal flower — [petals] rounded lobes arranged in a circle. */
-private fun petalFlower(petals: Int, overlap: Float = 0.3f): Shape =
+/** Pixelated stepped cross (8-bit style). */
+private fun pixelCrossShape(): Shape =
+    object : Shape {
+        override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
+            val w = size.width
+            val h = size.height
+            val u = w / 6f
+            val v = h / 6f
+            val path = Path().apply {
+                moveTo(2 * u, 0f)
+                lineTo(4 * u, 0f)
+                lineTo(4 * u, 2 * v)
+                lineTo(6 * u, 2 * v)
+                lineTo(6 * u, 4 * v)
+                lineTo(4 * u, 4 * v)
+                lineTo(4 * u, 6 * v)
+                lineTo(2 * u, 6 * v)
+                lineTo(2 * u, 4 * v)
+                lineTo(0f, 4 * v)
+                lineTo(0f, 2 * v)
+                lineTo(2 * u, 2 * v)
+                close()
+            }
+            return Outline.Generic(path)
+        }
+    }
+
+/**
+ * Polar flower / clover curve — smooth lobes arranged around circle,
+ * guaranteed to stay strictly within [0..w] × [0..h].
+ */
+private fun polarFlower(
+    lobes: Int,
+    baseRatio: Float = 0.72f,
+    amplitude: Float = 0.24f,
+    power: Float = 1.0f,
+    rotation: Float = -PI.toFloat() / 2
+): Shape =
     object : Shape {
         override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
             val cx = size.width / 2f
             val cy = size.height / 2f
-            val r  = min(cx, cy)
-            val pr = r * (0.55f + overlap)
-            val steps = 64
+            val maxR = min(cx, cy) * 0.96f
+            val steps = lobes * 32
             val path = Path()
-            var first = true
-            for (p in 0 until petals) {
-                val centerAngle = (2 * PI * p / petals - PI / 2).toFloat()
-                val pcx = cx + (r * (1 - overlap)) * cos(centerAngle)
-                val pcy = cy + (r * (1 - overlap)) * sin(centerAngle)
-                for (s in 0..steps) {
-                    val angle = (2 * PI * s / steps).toFloat()
-                    val x = pcx + pr * cos(angle)
-                    val y = pcy + pr * sin(angle)
-                    if (first) { path.moveTo(x, y); first = false } else path.lineTo(x, y)
-                }
+            for (i in 0..steps) {
+                val theta = (2 * PI * i / steps).toFloat()
+                val wave = cos(lobes * (theta - rotation))
+                val normalizedWave = if (power != 1.0f) {
+                    val sign = if (wave >= 0) 1f else -1f
+                    sign * abs(wave).pow(power)
+                } else wave
+                val r = maxR * (baseRatio + amplitude * normalizedWave)
+                val x = cx + r * cos(theta)
+                val y = cy + r * sin(theta)
+                if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
             }
             path.close()
             return Outline.Generic(path)
         }
     }
 
-/** Cloud — bumpy top, flat-ish bottom. */
-private fun cloudShape(bumps: Int = 5): Shape =
+/** Cloud — fluffy balanced lobes on top, flat rounded bottom. */
+private fun cloudShape(): Shape =
     object : Shape {
         override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
             val w = size.width
             val h = size.height
-            val path = Path()
-            val bumpR = w / (bumps * 2f)
-            path.moveTo(bumpR, h * 0.65f)
-            for (i in 0 until bumps) {
-                val bx = bumpR + i * (w - 2 * bumpR) / (bumps - 1f)
-                path.cubicTo(bx - bumpR, h * 0.2f, bx + bumpR, h * 0.2f, bx + bumpR, h * 0.55f)
+            val path = Path().apply {
+                moveTo(w * 0.2f, h * 0.82f)
+                lineTo(w * 0.8f, h * 0.82f)
+                cubicTo(w * 0.96f, h * 0.82f, w, h * 0.68f, w * 0.94f, h * 0.56f)
+                cubicTo(w * 0.96f, h * 0.38f, w * 0.84f, h * 0.30f, w * 0.70f, h * 0.34f)
+                cubicTo(w * 0.66f, h * 0.14f, w * 0.38f, h * 0.14f, w * 0.32f, h * 0.34f)
+                cubicTo(w * 0.18f, h * 0.30f, w * 0.04f, h * 0.42f, w * 0.06f, h * 0.58f)
+                cubicTo(w * 0.04f, h * 0.72f, w * 0.10f, h * 0.82f, w * 0.2f, h * 0.82f)
+                close()
             }
-            path.lineTo(w - bumpR, h)
-            path.lineTo(bumpR, h)
-            path.close()
             return Outline.Generic(path)
         }
     }
@@ -322,50 +376,50 @@ private fun heartShape(sharpBottom: Boolean = false): Shape =
         override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
             val w = size.width
             val h = size.height
-            val bY = if (sharpBottom) h else h * 0.88f
+            val bY = if (sharpBottom) h * 0.98f else h * 0.88f
             val path = Path().apply {
-                moveTo(w * 0.5f, h * 0.28f)
+                moveTo(w * 0.5f, h * 0.26f)
                 // Right lobe
-                cubicTo(w * 0.5f, h * 0.06f, w * 1.0f, h * 0.08f, w * 1.0f, h * 0.36f)
-                cubicTo(w * 1.0f, h * 0.62f, w * 0.75f, h * 0.74f, w * 0.5f, bY)
+                cubicTo(w * 0.55f, h * 0.05f, w * 0.98f, h * 0.08f, w * 0.98f, h * 0.36f)
+                cubicTo(w * 0.98f, h * 0.60f, w * 0.74f, h * 0.76f, w * 0.5f, bY)
                 // Left lobe
-                cubicTo(w * 0.25f, h * 0.74f, 0f, h * 0.62f, 0f, h * 0.36f)
-                cubicTo(0f, h * 0.08f, w * 0.5f, h * 0.06f, w * 0.5f, h * 0.28f)
+                cubicTo(w * 0.26f, h * 0.76f, w * 0.02f, h * 0.60f, w * 0.02f, h * 0.36f)
+                cubicTo(w * 0.02f, h * 0.08f, w * 0.45f, h * 0.05f, w * 0.5f, h * 0.26f)
                 close()
             }
             return Outline.Generic(path)
         }
     }
 
-/** Teardrop — circle top + pointed bottom. */
+/** Teardrop — rounded top + pointed bottom, continuous smooth contour. */
 private fun teardropShape(): Shape =
     object : Shape {
         override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
             val w = size.width
             val h = size.height
-            val r = w * 0.4f
             val path = Path().apply {
-                moveTo(w * 0.5f, h)
-                cubicTo(0f, h * 0.65f, w * 0.5f - r, h * 0.5f - r, w * 0.5f - r, h * 0.4f)
-                addArc(Rect(w * 0.5f - r, 0f, w * 0.5f + r, h * 0.8f), 180f, -180f)
-                cubicTo(w * 0.5f + r, h * 0.5f - r, w, h * 0.65f, w * 0.5f, h)
+                moveTo(w * 0.5f, h * 0.98f)
+                cubicTo(w * 0.06f, h * 0.72f, 0f, h * 0.44f, 0f, h * 0.32f)
+                cubicTo(0f, h * 0.05f, w * 0.22f, 0f, w * 0.5f, 0f)
+                cubicTo(w * 0.78f, 0f, w, h * 0.05f, w, h * 0.32f)
+                cubicTo(w, h * 0.44f, w * 0.94f, h * 0.72f, w * 0.5f, h * 0.98f)
                 close()
             }
             return Outline.Generic(path)
         }
     }
 
-/** Arch — rectangle with a semicircular top. */
+/** Arch — rectangle with a semicircular top, continuous smooth contour. */
 private fun archShape(): Shape =
     object : Shape {
         override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
             val w = size.width
             val h = size.height
-            val r = w / 2f
             val path = Path().apply {
                 moveTo(0f, h)
-                lineTo(0f, r)
-                addArc(Rect(0f, 0f, w, r * 2), 180f, -180f)
+                lineTo(0f, w * 0.5f)
+                cubicTo(0f, w * 0.22f, w * 0.22f, 0f, w * 0.5f, 0f)
+                cubicTo(w * 0.78f, 0f, w, w * 0.22f, w, w * 0.5f)
                 lineTo(w, h)
                 close()
             }
@@ -373,18 +427,17 @@ private fun archShape(): Shape =
         }
     }
 
-/** Tombstone — arch with slightly taller body. Same as Arch but proportioned differently. */
+/** Tombstone — arch with taller body, continuous smooth contour. */
 private fun tombstoneShape(): Shape =
     object : Shape {
         override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
             val w = size.width
             val h = size.height
-            val r = w / 2f
-            val archH = r * 1.1f
             val path = Path().apply {
                 moveTo(0f, h)
-                lineTo(0f, archH)
-                addArc(Rect(0f, 0f, w, archH * 2), 180f, -180f)
+                lineTo(0f, h * 0.46f)
+                cubicTo(0f, h * 0.16f, w * 0.22f, 0f, w * 0.5f, 0f)
+                cubicTo(w * 0.78f, 0f, w, h * 0.16f, w, h * 0.46f)
                 lineTo(w, h)
                 close()
             }
@@ -392,24 +445,29 @@ private fun tombstoneShape(): Shape =
         }
     }
 
-/** Ticket — rounded rect with small semicircular bites on left and right edges. */
+/** Ticket — rounded rect with inward circular/cubic bites on left and right edges. */
 private fun ticketShape(): Shape =
     object : Shape {
         override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
             val w = size.width
             val h = size.height
-            val r = min(w, h) * 0.12f
-            val biteR = min(w, h) * 0.08f
+            val r = min(w, h) * 0.14f
+            val biteR = min(w, h) * 0.15f
+            val cy = h / 2f
             val path = Path().apply {
                 moveTo(r, 0f)
-                lineTo(w - r, 0f); cubicTo(w, 0f, w, 0f, w, r)
-                lineTo(w, h / 2 - biteR)
-                addArc(Rect(w - biteR * 2, h / 2 - biteR, w, h / 2 + biteR), -90f, 180f)
-                lineTo(w, h - r); cubicTo(w, h, w, h, w - r, h)
-                lineTo(r, h); cubicTo(0f, h, 0f, h, 0f, h - r)
-                lineTo(0f, h / 2 + biteR)
-                addArc(Rect(0f, h / 2 - biteR, biteR * 2, h / 2 + biteR), 90f, 180f)
-                lineTo(0f, r); cubicTo(0f, 0f, 0f, 0f, r, 0f)
+                lineTo(w - r, 0f)
+                cubicTo(w, 0f, w, 0f, w, r)
+                lineTo(w, cy - biteR)
+                cubicTo(w - biteR * 1.3f, cy - biteR, w - biteR * 1.3f, cy + biteR, w, cy + biteR)
+                lineTo(w, h - r)
+                cubicTo(w, h, w, h, w - r, h)
+                lineTo(r, h)
+                cubicTo(0f, h, 0f, h, 0f, h - r)
+                lineTo(0f, cy + biteR)
+                cubicTo(biteR * 1.3f, cy + biteR, biteR * 1.3f, cy - biteR, 0f, cy - biteR)
+                lineTo(0f, r)
+                cubicTo(0f, 0f, 0f, 0f, r, 0f)
                 close()
             }
             return Outline.Generic(path)

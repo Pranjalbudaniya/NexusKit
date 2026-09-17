@@ -27,7 +27,7 @@ data class SettingsUiState(
 )
 
 enum class SettingsSheet {
-    THEME, THEME_MODE, FONT, CARD_SHAPE, FAV_SHAPE, STATUS_BAR, HIDDEN_TOOLS, APP_NAME
+    THEME, THEME_MODE, CARD_SHAPE, FAV_SHAPE, STATUS_BAR, HIDDEN_TOOLS, APP_NAME
 }
 
 @HiltViewModel

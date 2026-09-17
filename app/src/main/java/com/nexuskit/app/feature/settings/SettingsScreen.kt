@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Smartphone
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomSheetDefaults
@@ -140,13 +141,6 @@ fun SettingsScreen(
                         value   = uiState.preferences.themeMode.displayName,
                         onClick = { viewModel.openSheet(SettingsSheet.THEME_MODE) }
                     )
-                    // Font
-                    SettingsItemRow(
-                        icon    = Icons.Filled.FontDownload,
-                        title   = "Font",
-                        value   = uiState.preferences.fontFamily.displayName,
-                        onClick = { viewModel.openSheet(SettingsSheet.FONT) }
-                    )
                     // Card Shape
                     SettingsItemRow(
                         icon    = Icons.Filled.Settings,
@@ -160,20 +154,6 @@ fun SettingsScreen(
                         title   = "Favourite Shape",
                         value   = uiState.preferences.favCardShape.displayName,
                         onClick = { viewModel.openSheet(SettingsSheet.FAV_SHAPE) }
-                    )
-                    // Shadow
-                    SettingsSliderItem(
-                        icon        = Icons.Filled.Phone,
-                        title       = "Shadow",
-                        steps       = ShadowElevation.entries.size - 2,
-                        value       = ShadowElevation.entries.indexOf(uiState.preferences.shadowElevation).toFloat(),
-                        valueRange  = 0f..(ShadowElevation.entries.size - 1).toFloat(),
-                        label       = uiState.preferences.shadowElevation.displayName,
-                        onValueChange = { index ->
-                            val mode = ShadowElevation.entries.getOrNull(index.toInt())
-                                ?: ShadowElevation.MEDIUM
-                            viewModel.update(PreferenceUpdate.SetShadowElevation(mode))
-                        }
                     )
                     // Density
                     SettingsSliderItem(
@@ -191,7 +171,7 @@ fun SettingsScreen(
                     )
                     // Status Bar
                     SettingsItemRow(
-                        icon    = Icons.Filled.Phone,
+                        icon    = Icons.Filled.Smartphone,
                         title   = "Status Bar",
                         value   = uiState.preferences.statusBarStyle.displayName,
                         onClick = { viewModel.openSheet(SettingsSheet.STATUS_BAR) }
@@ -240,11 +220,6 @@ fun SettingsScreen(
             selectedShape    = uiState.preferences.favCardShape,
             onShapeSelected  = { viewModel.update(PreferenceUpdate.SetFavCardShape(it)) },
             onDismiss        = viewModel::closeSheet
-        )
-        SettingsSheet.FONT -> FontPickerSheet(
-            selectedFont  = uiState.preferences.fontFamily,
-            onFontSelected= { viewModel.update(PreferenceUpdate.SetFontFamily(it)) },
-            onDismiss     = viewModel::closeSheet
         )
         SettingsSheet.HIDDEN_TOOLS -> HiddenToolsSheet(
             hiddenTools  = uiState.hiddenTools,
@@ -529,31 +504,43 @@ fun <T> SimpleEnumPickerSheet(
         sheetState = sheetState,
         dragHandle = { BottomSheetDefaults.DragHandle() }
     ) {
-        Column(modifier = Modifier.padding(bottom = spacing.xl)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = spacing.xl)
+                .padding(bottom = spacing.xxl)
+        ) {
             Text(
                 text     = title,
                 style    = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = spacing.xl, vertical = spacing.md)
+                color    = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(horizontal = spacing.xs, vertical = spacing.md)
             )
+            Spacer(Modifier.height(spacing.xs))
             options.forEach { option ->
                 val isSelected = option == selected
                 Surface(
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
                     color = if (isSelected)
                                 MaterialTheme.colorScheme.primaryContainer
                             else
-                                MaterialTheme.colorScheme.surface,
+                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(vertical = spacing.xs)
                         .clickable {
                             onSelect(option)
                             onDismiss()
                         }
-                        .padding(horizontal = spacing.xl, vertical = spacing.md)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = spacing.lg, vertical = spacing.md),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(
                             text     = labelOf(option),
                             style    = MaterialTheme.typography.bodyLarge,
+                            fontWeight = if (isSelected) androidx.compose.ui.text.font.FontWeight.SemiBold else androidx.compose.ui.text.font.FontWeight.Normal,
                             color    = if (isSelected)
                                            MaterialTheme.colorScheme.onPrimaryContainer
                                        else

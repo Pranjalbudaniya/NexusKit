@@ -41,6 +41,8 @@ import com.nexuskit.app.feature.tools.screen_light.ScreenLightScreen
 import com.nexuskit.app.feature.tools.stopwatch.StopwatchScreen
 import com.nexuskit.app.feature.tools.text_editor.TextEditorScreen
 import com.nexuskit.app.feature.tools.text_suite.TextSuiteScreen
+import com.nexuskit.app.feature.tools.encryption.EncryptionScreen
+import com.nexuskit.app.feature.tools.sip_calculator.SipScreen
 import com.nexuskit.app.feature.tools.unit_converter.UnitConverterScreen
 import com.nexuskit.app.feature.tools.world_clock.WorldClockScreen
 
@@ -283,6 +285,20 @@ fun NavGraph(
 
         composable(NavRoutes.TOOL_REFERENCE_SHEETS) {
             ReferenceScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_SIP_CALCULATOR) {
+            SipScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_ENCRYPTION) {
+            EncryptionScreen(
                 navController = navController,
                 onBack = { navController.popBackStack() }
             )

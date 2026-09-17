@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nexuskit.app.domain.model.UserPreferences
@@ -93,14 +94,38 @@ fun NexusKitThemeContent(
         }
     }
 
-    // ── Typography (Memoized) ─────────────────────────────────────
-    val typography = androidx.compose.runtime.remember(prefs.fontFamily) {
-        buildTypography(prefs.fontFamily)
+    // ── Typography (Fixed System Default) ─────────────────────────
+    val typography = androidx.compose.runtime.remember {
+        buildTypography(com.nexuskit.app.domain.model.enums.FontFamily.SYSTEM_DEFAULT)
     }
 
     // ── Spacing (Memoized) ────────────────────────────────────────
     val spacing = androidx.compose.runtime.remember(prefs.spacingMode) {
         NexusKitSpacing.forMode(prefs.spacingMode)
+    }
+
+    // ── Status Bar System Appearance ─────────────────────────────
+    val view = androidx.compose.ui.platform.LocalView.current
+    if (!view.isInEditMode) {
+        androidx.compose.runtime.SideEffect {
+            val window = (view.context as? android.app.Activity)?.window ?: return@SideEffect
+            val insetsController = androidx.core.view.WindowCompat.getInsetsController(window, view)
+
+            when (prefs.statusBarStyle) {
+                com.nexuskit.app.domain.model.enums.StatusBarStyle.TRANSPARENT -> {
+                    window.statusBarColor = android.graphics.Color.TRANSPARENT
+                    insetsController.isAppearanceLightStatusBars = !isDark
+                }
+                com.nexuskit.app.domain.model.enums.StatusBarStyle.COLORED -> {
+                    window.statusBarColor = colorScheme.primary.toArgb()
+                    insetsController.isAppearanceLightStatusBars = false
+                }
+                com.nexuskit.app.domain.model.enums.StatusBarStyle.SYSTEM_DEFAULT -> {
+                    window.statusBarColor = if (isDark) android.graphics.Color.BLACK else android.graphics.Color.WHITE
+                    insetsController.isAppearanceLightStatusBars = !isDark
+                }
+            }
+        }
     }
 
     CompositionLocalProvider(
