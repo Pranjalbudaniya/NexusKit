@@ -12,9 +12,9 @@
 
 <br />
 
-**NexusKit** is an open-source, private, and lightning-fast Swiss Army knife for Android. Packed with 20+ offline calculation, conversion, text, developer, and productivity tools in a sleek Material You (M3) design — zero accounts, zero analytics, zero ads, zero battery drain.
+**NexusKit** is an open-source, private, and lightning-fast Swiss Army knife for Android. Packed with 25+ offline calculation, conversion, financial, text, encryption, and productivity tools in a sleek Material You (M3) design — zero accounts, zero analytics, zero ads, zero battery drain.
 
-[Features](#-feature-suite) • [Widgets](#-home-screen-widgets) • [Tech Stack](#-architecture--tech-stack) • [Building](#-getting-started) • [Privacy](#-privacy--security)
+[Features](#-feature-suite) • [Widgets](#-home-screen-widgets) • [Tech Stack](#-architecture--tech-stack) • [Privacy](#-privacy--security)
 
 </div>
 
@@ -25,7 +25,7 @@
 - 🔒 **100% Offline & Private** — Never communicates with external servers. No telemetry, no ads, no trackers, and no user accounts.
 - ⚡ **Instant Response Times** — Native Jetpack Compose UI running pure local Kotlin calculation engines.
 - 🔋 **Zero Battery Drain** — No background wake-locks, polling workers, or heavy daemon services.
-- 🎨 **Deep Customization** — Material You Dynamic Color, AMOLED Dark Theme, Custom Font Providers, and 50+ geometric card shape customizers.
+- 🎨 **Deep Customization** — Material You Dynamic Color, AMOLED Dark Theme, Status Bar styling, and 50+ geometric card and icon shape customizers.
 - 📱 **Battery-Efficient Widgets** — Lightweight 4x2 Quick Grid and 4x1 Quick Bar for 1-tap access to your daily tools.
 
 ---
@@ -36,6 +36,7 @@
 | Tool | Description |
 | :--- | :--- |
 | **Scientific Calculator** | Fast arithmetic with live expression parsing, memory registers, and history log. |
+| **SIP & Investment Calculator** | Calculate monthly SIP and Lump Sum returns with interactive growth charts and yearly progression schedules. |
 | **Percentage & Bill Split** | Instant percentage math, tip calculation, margins, and multi-person bill splitting. |
 | **Radix Base Converter** | Real-time simultaneous radix conversion between **Binary, Octal, Decimal, and Hexadecimal**. |
 | **Date & Time Calculator** | Calculate exact difference between dates (years, months, days) and add/subtract duration. |
@@ -59,6 +60,7 @@
 ### 📝 3. Text & Developer Tools
 | Tool | Description |
 | :--- | :--- |
+| **Encryption & Decoding Suite** | Offline cryptographic suite supporting **AES-256, DES, Caesar, Vigenère, ROT13, Base64, Hex, Binary, Morse, and URL Encoding**. |
 | **Markdown Notes & Editor** | Offline scratchpad and note editor with live word count, character statistics, and reading time. |
 | **Case Converter** | Transform text into `UPPERCASE`, `lowercase`, `camelCase`, `snake_case`, `kebab-case`, `Title Case`, and URL `slug`. |
 | **Text Inspector & Diff** | Real-time word frequency analysis, whitespace cleanup, and visual line-by-line diff comparison. |
@@ -135,29 +137,6 @@ nexuskit/
 - **State Management**: Kotlin Coroutines & `StateFlow`
 - **Data Persistence**: Jetpack DataStore Preferences & Room
 - **Target OS**: Android 10 (API 29) to Android 15 (API 35)
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Android Studio Ladybug (2024.2.1+) or newer
-- JDK 17 or JDK 21 (bundled with Android Studio)
-- Android SDK with API 35 installed
-
-### Clone and Build
-
-```bash
-# 1. Clone repository
-git clone https://github.com/Pranjalbudaniya/NexusKit.git
-cd NexusKit
-
-# 2. Build Debug APK
-./gradlew assembleDebug
-
-# 3. Install on connected device via ADB
-./gradlew installDebug
-```
 
 ---
 
