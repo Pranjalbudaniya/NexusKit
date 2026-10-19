@@ -31,7 +31,7 @@ data class RandomizerUiState(
     val headsCount: Int = 0,
     val tailsCount: Int = 0,
     // List Decision
-    val listInputText: String = "Pizza\nBurger\nSushi\nTacos\nPasta",
+    val listInputText: String = "",
     val pickedItem: String? = null,
     val shuffledList: List<String> = emptyList()
 )

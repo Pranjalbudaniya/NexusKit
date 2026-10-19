@@ -26,8 +26,8 @@ data class ScreenLightUiState(
     val isSosRunning: Boolean = false,
     val isScreenFlashOn: Boolean = true,
     // ── Morse Code Transmitter State ──────────────────────────────────────
-    val morseInputText: String = "HELLO WORLD",
-    val morseSymbols: List<MorseSymbol> = ScreenLightEngine.textToMorseSymbols("HELLO WORLD"),
+    val morseInputText: String = "",
+    val morseSymbols: List<MorseSymbol> = emptyList(),
     val activeSymbolIndex: Int = -1,
     val isMorseTransmitting: Boolean = false,
     val isMorseLooping: Boolean = false,

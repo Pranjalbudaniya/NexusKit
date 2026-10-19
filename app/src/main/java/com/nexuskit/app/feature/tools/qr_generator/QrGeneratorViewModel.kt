@@ -19,7 +19,7 @@ import javax.inject.Inject
 data class QrGeneratorUiState(
     val selectedType: QrType = QrType.TEXT,
     // Fields
-    val textContent: String = "https://github.com",
+    val textContent: String = "",
     val urlContent: String = "https://",
     val wifiSsid: String = "",
     val wifiPassword: String = "",
@@ -30,7 +30,7 @@ data class QrGeneratorUiState(
     val phoneNumber: String = "",
     val smsMessage: String = "",
     // Generated payload
-    val rawPayload: String = "https://github.com",
+    val rawPayload: String = "",
     val qrBitmap: Bitmap? = null,
     val isGenerating: Boolean = false
 )

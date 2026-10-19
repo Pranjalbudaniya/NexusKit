@@ -16,25 +16,25 @@ import javax.inject.Inject
 data class DevToolsUiState(
     val selectedTab: DevToolTab = DevToolTab.JSON_FORMATTER,
     // JSON
-    val jsonInput: String = "{\"name\":\"NexusKit\",\"offline\":true,\"version\":2.0,\"tools\":[\"JSON\",\"Regex\",\"CRON\"]}",
+    val jsonInput: String = "",
     val jsonOutput: String = "",
     val isJsonValid: Boolean = true,
     // Regex
-    val regexPattern: String = "([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})",
-    val regexSampleText: String = "Contact team at support@nexuskit.app or dev@google.com for info.",
+    val regexPattern: String = "",
+    val regexSampleText: String = "",
     val regexCaseInsensitive: Boolean = true,
     val regexDotAll: Boolean = false,
     val regexMatches: List<RegexMatchResult> = emptyList(),
     val isRegexValid: Boolean = true,
     // CRON
-    val cronMinute: String = "*/15",
+    val cronMinute: String = "*",
     val cronHour: String = "*",
     val cronDayOfMonth: String = "*",
     val cronMonth: String = "*",
     val cronDayOfWeek: String = "*",
     val cronExplanation: String = "",
     // SQL
-    val sqlInput: String = "SELECT users.id, users.name, orders.total FROM users LEFT JOIN orders ON users.id = orders.user_id WHERE orders.status = 'completed' ORDER BY orders.created_at DESC LIMIT 10",
+    val sqlInput: String = "",
     val sqlOutput: String = "",
     // HTTP Codes Search
     val httpSearchQuery: String = ""

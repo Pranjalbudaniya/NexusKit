@@ -31,7 +31,7 @@ data class ProductivityUiState(
     val habits: List<HabitItem> = ProductivityEngine.defaultHabits,
     val newHabitName: String = "",
     // Scratchpad
-    val scratchpadText: String = "Meeting notes:\n- Offline utility tools active\n- Instant response times\n- Zero battery drain"
+    val scratchpadText: String = ""
 )
 
 @HiltViewModel

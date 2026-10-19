@@ -27,10 +27,12 @@ import com.nexuskit.app.feature.tools.case_converter.CaseConverterScreen
 import com.nexuskit.app.feature.tools.color_palette.ColorPaletteScreen
 import com.nexuskit.app.feature.tools.date_calculator.DateCalcScreen
 import com.nexuskit.app.feature.tools.developer_tools.DevToolsScreen
+import com.nexuskit.app.feature.tools.exif_tool.ExifScreen
 import com.nexuskit.app.feature.tools.discount_calculator.DiscountScreen
 import com.nexuskit.app.feature.tools.hash_generator.HashScreen
 import com.nexuskit.app.feature.tools.health_fitness.FitnessScreen
 import com.nexuskit.app.feature.tools.loan_calculator.LoanScreen
+import com.nexuskit.app.feature.tools.markdown_editor.MarkdownScreen
 import com.nexuskit.app.feature.tools.password_generator.PasswordGeneratorScreen
 import com.nexuskit.app.feature.tools.percentage_calc.PercentageScreen
 import com.nexuskit.app.feature.tools.productivity_suite.ProductivityScreen
@@ -38,12 +40,15 @@ import com.nexuskit.app.feature.tools.qr_generator.QrGeneratorScreen
 import com.nexuskit.app.feature.tools.reference_sheets.ReferenceScreen
 import com.nexuskit.app.feature.tools.science_education.ScienceScreen
 import com.nexuskit.app.feature.tools.screen_light.ScreenLightScreen
+import com.nexuskit.app.feature.tools.sound_meter.SoundMeterScreen
+import com.nexuskit.app.feature.tools.steganography.SteganographyScreen
 import com.nexuskit.app.feature.tools.stopwatch.StopwatchScreen
 import com.nexuskit.app.feature.tools.text_editor.TextEditorScreen
 import com.nexuskit.app.feature.tools.text_suite.TextSuiteScreen
 import com.nexuskit.app.feature.tools.encryption.EncryptionScreen
 import com.nexuskit.app.feature.tools.sip_calculator.SipScreen
 import com.nexuskit.app.feature.tools.unit_converter.UnitConverterScreen
+import com.nexuskit.app.feature.tools.randomizer.RandomizerScreen
 import com.nexuskit.app.feature.tools.world_clock.WorldClockScreen
 
 /**
@@ -299,6 +304,41 @@ fun NavGraph(
 
         composable(NavRoutes.TOOL_ENCRYPTION) {
             EncryptionScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_RANDOMIZER) {
+            RandomizerScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_EXIF) {
+            ExifScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_STEGANOGRAPHY) {
+            SteganographyScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_SOUND_METER) {
+            SoundMeterScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_MARKDOWN_EDITOR) {
+            MarkdownScreen(
                 navController = navController,
                 onBack = { navController.popBackStack() }
             )

@@ -173,6 +173,7 @@ object ScienceEngine {
 
     // Scientific notation converter
     fun toScientificNotation(numberStr: String): String {
+        if (numberStr.trim().isEmpty()) return ""
         val num = numberStr.trim().toDoubleOrNull() ?: return "Invalid number"
         if (num == 0.0) return "0.0 × 10⁰"
         val exponent = floor(log10(abs(num))).toInt()
@@ -181,6 +182,7 @@ object ScienceEngine {
     }
 
     fun fromScientificNotation(mantissaStr: String, exponentStr: String): String {
+        if (mantissaStr.trim().isEmpty() || exponentStr.trim().isEmpty()) return ""
         val m = mantissaStr.trim().toDoubleOrNull() ?: return "Invalid"
         val e = exponentStr.trim().toIntOrNull() ?: return "Invalid"
         val res = m * 10.0.pow(e.toDouble())

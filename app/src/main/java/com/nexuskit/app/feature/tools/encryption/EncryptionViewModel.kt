@@ -38,7 +38,7 @@ data class EncryptionUiState(
     val mode: CryptoMode = CryptoMode.ENCRYPT,
     val algorithm: CryptoAlgorithm = CryptoAlgorithm.AES,
     val inputText: String = "",
-    val keyInput: String = "secretKey123",
+    val keyInput: String = "",
     val outputText: String = "",
     val errorMessage: String? = null
 )
@@ -55,14 +55,7 @@ class EncryptionViewModel @Inject constructor() : ViewModel() {
     }
 
     fun onAlgorithmSelected(algo: CryptoAlgorithm) {
-        val defaultKey = when (algo) {
-            CryptoAlgorithm.AES -> "secretKey123"
-            CryptoAlgorithm.DES -> "8charKey"
-            CryptoAlgorithm.CAESAR -> "3"
-            CryptoAlgorithm.VIGENERE -> "NEXUS"
-            else -> ""
-        }
-        _uiState.update { it.copy(algorithm = algo, keyInput = if (it.keyInput.isBlank()) defaultKey else it.keyInput) }
+        _uiState.update { it.copy(algorithm = algo) }
         process()
     }
 
@@ -101,6 +94,11 @@ class EncryptionViewModel @Inject constructor() : ViewModel() {
 
         if (text.isEmpty()) {
             _uiState.update { it.copy(outputText = "", errorMessage = null) }
+            return
+        }
+
+        if (state.algorithm.requiresKey && key.isBlank()) {
+            _uiState.update { it.copy(outputText = "", errorMessage = "Please enter a key to proceed") }
             return
         }
 

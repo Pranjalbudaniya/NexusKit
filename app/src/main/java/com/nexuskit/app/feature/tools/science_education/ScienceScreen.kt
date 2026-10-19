@@ -431,19 +431,21 @@ private fun TrigonometryView(uiState: ScienceUiState, viewModel: ScienceViewMode
             }
         }
 
-        item {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
-            ) {
-                Column(modifier = Modifier.padding(spacing.md), verticalArrangement = Arrangement.spacedBy(spacing.sm)) {
-                    uiState.trigResults.forEach { (fn, value) ->
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text("$fn(θ)", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary))
-                            Text(if (value.isNaN()) "Undefined" else String.format(java.util.Locale.US, "%.6f", value), style = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace))
+        if (uiState.trigResults.isNotEmpty()) {
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+                ) {
+                    Column(modifier = Modifier.padding(spacing.md), verticalArrangement = Arrangement.spacedBy(spacing.sm)) {
+                        uiState.trigResults.forEach { (fn, value) ->
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                Text("$fn(θ)", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary))
+                                Text(if (value.isNaN()) "Undefined" else String.format(java.util.Locale.US, "%.6f", value), style = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace))
+                            }
+                            HorizontalDivider()
                         }
-                        HorizontalDivider()
                     }
                 }
             }
@@ -473,12 +475,14 @@ private fun ScientificNotationView(uiState: ScienceUiState, viewModel: ScienceVi
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp)
                     )
-                    Surface(shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.primaryContainer, modifier = Modifier.fillMaxWidth()) {
-                        Text(
-                            text = "Result: ${uiState.scientificResult}",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace),
-                            modifier = Modifier.padding(spacing.md)
-                        )
+                    if (uiState.scientificResult.isNotEmpty()) {
+                        Surface(shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.primaryContainer, modifier = Modifier.fillMaxWidth()) {
+                            Text(
+                                text = "Result: ${uiState.scientificResult}",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace),
+                                modifier = Modifier.padding(spacing.md)
+                            )
+                        }
                     }
                 }
             }
@@ -508,12 +512,14 @@ private fun ScientificNotationView(uiState: ScienceUiState, viewModel: ScienceVi
                             shape = RoundedCornerShape(10.dp)
                         )
                     }
-                    Surface(shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.primaryContainer, modifier = Modifier.fillMaxWidth()) {
-                        Text(
-                            text = "Standard: ${uiState.decimalResult}",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace),
-                            modifier = Modifier.padding(spacing.md)
-                        )
+                    if (uiState.decimalResult.isNotEmpty()) {
+                        Surface(shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.primaryContainer, modifier = Modifier.fillMaxWidth()) {
+                            Text(
+                                text = "Standard: ${uiState.decimalResult}",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace),
+                                modifier = Modifier.padding(spacing.md)
+                            )
+                        }
                     }
                 }
             }

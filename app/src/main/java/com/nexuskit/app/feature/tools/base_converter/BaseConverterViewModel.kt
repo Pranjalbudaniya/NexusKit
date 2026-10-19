@@ -14,13 +14,13 @@ import javax.inject.Inject
 
 data class BaseConverterUiState(
     val activeBase: NumberBase = NumberBase.DEC,
-    val inputValue: String = "42",
-    val hexValue: String = "2A",
-    val decValue: String = "42",
-    val octValue: String = "52",
-    val binValue: String = "0010 1010",
-    val bitLength: Int = 6,
-    val ascii: String = "'*'"
+    val inputValue: String = "0",
+    val hexValue: String = "0",
+    val decValue: String = "0",
+    val octValue: String = "0",
+    val binValue: String = "0000",
+    val bitLength: Int = 0,
+    val ascii: String = "NUL (0)"
 )
 
 @HiltViewModel

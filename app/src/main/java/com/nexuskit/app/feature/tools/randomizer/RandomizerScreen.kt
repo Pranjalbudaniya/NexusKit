@@ -379,6 +379,7 @@ fun RandomizerScreen(
                                     OutlinedTextField(
                                         value = uiState.listInputText,
                                         onValueChange = viewModel::onListInputChanged,
+                                        placeholder = { Text("e.g. Option 1\nOption 2\nOption 3") },
                                         modifier = Modifier.fillMaxWidth().height(120.dp)
                                     )
 

@@ -179,6 +179,15 @@ object ToolRegistry {
             route          = "tool/text_suite",
             searchKeywords = listOf("text", "diff", "compare", "word count", "character count", "slug", "find", "replace", "inspect")
         ),
+        ToolInfo(
+            id             = "markdown_editor",
+            name           = "Markdown & PDF Exporter",
+            description    = "Rich offline Markdown editor with live preview, toolbar shortcuts, and A4 PDF/HTML export",
+            iconName       = "Note",
+            categoryId     = "text",
+            route          = "tool/markdown_editor",
+            searchKeywords = listOf("markdown", "md", "pdf", "html", "export", "editor", "notes", "write", "preview")
+        ),
 
         // ── UTILITIES ─────────────────────────────────────────────────────────
         ToolInfo(
@@ -261,6 +270,42 @@ object ToolRegistry {
             categoryId     = "utilities",
             route          = "tool/encryption_tool",
             searchKeywords = listOf("encrypt", "decrypt", "cipher", "aes", "des", "caesar", "vigenere", "base64", "hex", "binary", "morse", "security", "decode", "encode")
+        ),
+        ToolInfo(
+            id             = "randomizer",
+            name           = "Randomizer & Decisions",
+            description    = "Roll RPG dice, flip coins, generate random numbers, and pick decisions from custom lists",
+            iconName       = "Casino",
+            categoryId     = "utilities",
+            route          = "tool/randomizer",
+            searchKeywords = listOf("random", "dice", "coin", "flip", "decision", "picker", "d20", "roll", "shuffle")
+        ),
+        ToolInfo(
+            id             = "exif_tool",
+            name           = "EXIF & Privacy Stripper",
+            description    = "Inspect embedded photo GPS coordinates, camera specs, and strip all metadata before sharing",
+            iconName       = "CameraAlt",
+            categoryId     = "utilities",
+            route          = "tool/exif_tool",
+            searchKeywords = listOf("exif", "metadata", "photo", "privacy", "gps", "location", "strip", "clean", "camera")
+        ),
+        ToolInfo(
+            id             = "steganography",
+            name           = "Image Steganography",
+            description    = "Conceal and reveal encrypted secret text messages inside photo pixels with zero visual distortion",
+            iconName       = "EnhancedEncryption",
+            categoryId     = "utilities",
+            route          = "tool/steganography",
+            searchKeywords = listOf("steganography", "stego", "hide", "secret", "image", "encrypt", "pixels", "lsb", "conceal")
+        ),
+        ToolInfo(
+            id             = "sound_meter",
+            name           = "Sound & Decibel Meter (SPL)",
+            description    = "Real-time sound pressure level dB measurement with environmental loudness scale and peak meter",
+            iconName       = "GraphicEq",
+            categoryId     = "utilities",
+            route          = "tool/sound_meter",
+            searchKeywords = listOf("sound", "decibel", "db", "noise", "spl", "meter", "microphone", "loudness", "audio")
         )
     )
 

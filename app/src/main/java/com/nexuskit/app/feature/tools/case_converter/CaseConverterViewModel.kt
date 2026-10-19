@@ -13,10 +13,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class CaseConverterUiState(
-    val inputText: String = "Hello world! This is NexusKit.",
-    val conversions: List<ConvertedCase> = CaseConverterEngine.convertAll("Hello world! This is NexusKit."),
-    val characterCount: Int = 30,
-    val wordCount: Int = 5
+    val inputText: String = "",
+    val conversions: List<ConvertedCase> = CaseConverterEngine.convertAll(""),
+    val characterCount: Int = 0,
+    val wordCount: Int = 0
 )
 
 @HiltViewModel

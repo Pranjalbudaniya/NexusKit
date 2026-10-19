@@ -24,7 +24,7 @@ data class YearlyBreakdown(
 
 data class SipUiState(
     val mode: SipMode = SipMode.SIP,
-    val amountInput: String = "5000",
+    val amountInput: String = "",
     val expectedReturnRate: Float = 12f,
     val timePeriodYears: Int = 10,
     val currencySymbol: String = "₹",

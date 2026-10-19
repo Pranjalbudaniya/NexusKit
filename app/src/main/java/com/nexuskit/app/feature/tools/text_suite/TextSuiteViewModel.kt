@@ -16,18 +16,18 @@ import javax.inject.Inject
 data class TextSuiteUiState(
     val selectedTab: TextTab = TextTab.WORD_COUNTER,
     // Word counter
-    val wordCounterInput: String = "NexusKit brings 175+ powerful utility tools together in a single, beautifully customizable offline Android app. Clean design, zero ads, zero tracking.",
-    val stats: TextStatistics = TextSuiteEngine.analyzeText("NexusKit brings 175+ powerful utility tools together in a single, beautifully customizable offline Android app. Clean design, zero ads, zero tracking."),
+    val wordCounterInput: String = "",
+    val stats: TextStatistics = TextSuiteEngine.analyzeText(""),
     // Cleaner & Sorter
-    val cleanerInput: String = "  Apple\nOrange\n  Apple  \n\nBanana\n  Orange\nMango  ",
+    val cleanerInput: String = "",
     val cleanerOutput: String = "",
     // Reverser & Palindrome
-    val reverserInput: String = "A man, a plan, a canal: Panama",
-    val isPalindrome: Boolean = true,
+    val reverserInput: String = "",
+    val isPalindrome: Boolean = false,
     val palindromeMessage: String = "",
     val reversedOutput: String = "",
     // Repeater & Truncator
-    val repeaterText: String = "NexusKit ",
+    val repeaterText: String = "",
     val repeaterCount: Int = 5,
     val repeaterOutput: String = "",
     val truncatorLimit: Int = 50,
@@ -36,7 +36,7 @@ data class TextSuiteUiState(
     val loremParagraphs: Int = 2,
     val loremOutput: String = TextSuiteEngine.generateLoremIpsum(2),
     // Extractor
-    val extractorInput: String = "Reach out at contact@nexuskit.app, support@google.com or visit https://nexuskit.app and call (555) 123-4567.",
+    val extractorInput: String = "",
     val extractedEmails: List<String> = emptyList(),
     val extractedUrls: List<String> = emptyList(),
     val extractedPhones: List<String> = emptyList()

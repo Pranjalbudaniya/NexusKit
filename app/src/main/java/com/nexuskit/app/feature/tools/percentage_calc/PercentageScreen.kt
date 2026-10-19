@@ -150,11 +150,13 @@ fun PercentageScreen(
                                     }
                                 }
 
-                                ResultCard(
-                                    label = "${uiState.mode1Percent}% of ${uiState.mode1Total}",
-                                    result = uiState.mode1Result,
-                                    onCopy = { clipboardManager.setText(AnnotatedString(uiState.mode1Result)) }
-                                )
+                                if (uiState.mode1Result.isNotBlank()) {
+                                    ResultCard(
+                                        label = "${uiState.mode1Percent}% of ${uiState.mode1Total}",
+                                        result = uiState.mode1Result,
+                                        onCopy = { clipboardManager.setText(AnnotatedString(uiState.mode1Result)) }
+                                    )
+                                }
                             }
                         }
 
@@ -189,11 +191,13 @@ fun PercentageScreen(
                                     }
                                 }
 
-                                ResultCard(
-                                    label = "${uiState.mode2Value} out of ${uiState.mode2Total}",
-                                    result = uiState.mode2Result,
-                                    onCopy = { clipboardManager.setText(AnnotatedString(uiState.mode2Result)) }
-                                )
+                                if (uiState.mode2Result.isNotBlank()) {
+                                    ResultCard(
+                                        label = "${uiState.mode2Value} out of ${uiState.mode2Total}",
+                                        result = uiState.mode2Result,
+                                        onCopy = { clipboardManager.setText(AnnotatedString(uiState.mode2Result)) }
+                                    )
+                                }
                             }
                         }
 
@@ -228,11 +232,13 @@ fun PercentageScreen(
                                     }
                                 }
 
-                                ResultCard(
-                                    label = "Change from ${uiState.mode3From} to ${uiState.mode3To}",
-                                    result = uiState.mode3Result,
-                                    onCopy = { clipboardManager.setText(AnnotatedString(uiState.mode3Result)) }
-                                )
+                                if (uiState.mode3Result.isNotBlank()) {
+                                    ResultCard(
+                                        label = "Change from ${uiState.mode3From} to ${uiState.mode3To}",
+                                        result = uiState.mode3Result,
+                                        onCopy = { clipboardManager.setText(AnnotatedString(uiState.mode3Result)) }
+                                    )
+                                }
                             }
                         }
 

@@ -22,25 +22,25 @@ enum class PercentMode(val displayName: String) {
 data class PercentageUiState(
     val selectedMode: PercentMode = PercentMode.PERCENT_OF,
     // Mode 1: X% of Y
-    val mode1Percent: String = "15",
-    val mode1Total: String = "200",
-    val mode1Result: String = "30",
+    val mode1Percent: String = "",
+    val mode1Total: String = "",
+    val mode1Result: String = "",
     // Mode 2: What % is X of Y?
-    val mode2Value: String = "25",
-    val mode2Total: String = "100",
-    val mode2Result: String = "25%",
+    val mode2Value: String = "",
+    val mode2Total: String = "",
+    val mode2Result: String = "",
     // Mode 3: % Change
-    val mode3From: String = "80",
-    val mode3To: String = "100",
-    val mode3Result: String = "+25%",
+    val mode3From: String = "",
+    val mode3To: String = "",
+    val mode3Result: String = "",
     val isIncrease: Boolean = true,
     // Mode 4: Tip & Split
-    val tipBill: String = "50",
+    val tipBill: String = "",
     val tipPercent: String = "15",
-    val tipSplitCount: String = "2",
-    val tipAmount: String = "$7.50",
-    val totalAmount: String = "$57.50",
-    val perPersonAmount: String = "$28.75"
+    val tipSplitCount: String = "1",
+    val tipAmount: String = "$0.00",
+    val totalAmount: String = "$0.00",
+    val perPersonAmount: String = "$0.00"
 )
 
 @HiltViewModel
@@ -65,31 +65,35 @@ class PercentageViewModel @Inject constructor(
 
     fun onMode1Changed(percent: String, total: String) {
         _uiState.update { it.copy(mode1Percent = percent, mode1Total = total) }
-        val p = percent.toDoubleOrNull() ?: 0.0
-        val t = total.toDoubleOrNull() ?: 0.0
-        val res = PercentageEngine.calculatePercentOf(p, t)
-        _uiState.update { it.copy(mode1Result = PercentageEngine.formatNumber(res)) }
+        val p = percent.toDoubleOrNull()
+        val t = total.toDoubleOrNull()
+        val res = if (p != null && t != null) PercentageEngine.formatNumber(PercentageEngine.calculatePercentOf(p, t)) else ""
+        _uiState.update { it.copy(mode1Result = res) }
     }
 
     fun onMode2Changed(value: String, total: String) {
         _uiState.update { it.copy(mode2Value = value, mode2Total = total) }
-        val v = value.toDoubleOrNull() ?: 0.0
-        val t = total.toDoubleOrNull() ?: 0.0
-        val res = PercentageEngine.calculateWhatPercentOf(v, t)
-        _uiState.update { it.copy(mode2Result = "${PercentageEngine.formatNumber(res)}%") }
+        val v = value.toDoubleOrNull()
+        val t = total.toDoubleOrNull()
+        val res = if (v != null && t != null) "${PercentageEngine.formatNumber(PercentageEngine.calculateWhatPercentOf(v, t))}%" else ""
+        _uiState.update { it.copy(mode2Result = res) }
     }
 
     fun onMode3Changed(from: String, to: String) {
         _uiState.update { it.copy(mode3From = from, mode3To = to) }
-        val f = from.toDoubleOrNull() ?: 0.0
-        val t = to.toDoubleOrNull() ?: 0.0
-        val res = PercentageEngine.calculatePercentChange(f, t)
-        val sign = if (res >= 0) "+" else ""
-        _uiState.update {
-            it.copy(
-                mode3Result = "$sign${PercentageEngine.formatNumber(res)}%",
-                isIncrease = res >= 0
-            )
+        val f = from.toDoubleOrNull()
+        val t = to.toDoubleOrNull()
+        if (f != null && t != null) {
+            val res = PercentageEngine.calculatePercentChange(f, t)
+            val sign = if (res >= 0) "+" else ""
+            _uiState.update {
+                it.copy(
+                    mode3Result = "$sign${PercentageEngine.formatNumber(res)}%",
+                    isIncrease = res >= 0
+                )
+            }
+        } else {
+            _uiState.update { it.copy(mode3Result = "", isIncrease = true) }
         }
     }
 

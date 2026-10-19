@@ -21,6 +21,13 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.FlashlightOn
+import androidx.compose.material.icons.filled.GraphicEq
+import androidx.compose.material.icons.automirrored.filled.TrendingDown
+import androidx.compose.material.icons.filled.Casino
+import androidx.compose.material.icons.filled.Lan
+import androidx.compose.material.icons.filled.Payments
+import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.FormatSize
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Link
@@ -93,6 +100,13 @@ val iconMap: Map<String, ImageVector> = mapOf(
     "CompareArrows"      to Icons.Filled.CompareArrows,
     "TrendingUp"         to Icons.Filled.TrendingUp,
     "Security"           to Icons.Filled.Security,
+    "Casino"             to Icons.Filled.Casino,
+    "Lan"                to Icons.Filled.Lan,
+    "Payments"           to Icons.Filled.Payments,
+    "Schedule"           to Icons.Filled.Schedule,
+    "TrendingDown"       to Icons.AutoMirrored.Filled.TrendingDown,
+    "Visibility"         to Icons.Filled.Visibility,
+    "GraphicEq"          to Icons.Filled.GraphicEq,
 
     // ── Categories ─────────────────────────────────────────────────────────
     "Build"              to Icons.Filled.Build,

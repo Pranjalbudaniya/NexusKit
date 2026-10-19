@@ -19,21 +19,21 @@ data class ScienceUiState(
     val elementSearchQuery: String = "",
     val constantSearchQuery: String = "",
     // Ohm's law inputs
-    val voltageInput: String = "12",
-    val currentInput: String = "2",
+    val voltageInput: String = "",
+    val currentInput: String = "",
     val resistanceInput: String = "",
     val powerInput: String = "",
     val ohmsResults: Map<String, Double> = emptyMap(),
     // Trig inputs
-    val trigAngleInput: String = "45",
+    val trigAngleInput: String = "",
     val isTrigDegrees: Boolean = true,
-    val trigResults: Map<String, Double> = ScienceEngine.calculateTrigonometry(45.0, true),
+    val trigResults: Map<String, Double> = emptyMap(),
     // Scientific notation inputs
-    val decimalInput: String = "0.000042",
-    val scientificResult: String = ScienceEngine.toScientificNotation("0.000042"),
-    val mantissaInput: String = "4.2",
-    val exponentInput: String = "-5",
-    val decimalResult: String = ScienceEngine.fromScientificNotation("4.2", "-5")
+    val decimalInput: String = "",
+    val scientificResult: String = "",
+    val mantissaInput: String = "",
+    val exponentInput: String = "",
+    val decimalResult: String = ""
 )
 
 @HiltViewModel
@@ -108,7 +108,12 @@ class ScienceViewModel @Inject constructor(
     }
 
     private fun recalculateTrig() {
-        val a = _uiState.value.trigAngleInput.toDoubleOrNull() ?: 0.0
+        val input = _uiState.value.trigAngleInput.trim()
+        if (input.isEmpty()) {
+            _uiState.update { it.copy(trigResults = emptyMap()) }
+            return
+        }
+        val a = input.toDoubleOrNull() ?: 0.0
         val res = ScienceEngine.calculateTrigonometry(a, _uiState.value.isTrigDegrees)
         _uiState.update { it.copy(trigResults = res) }
     }

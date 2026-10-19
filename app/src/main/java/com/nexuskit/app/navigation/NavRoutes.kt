@@ -45,6 +45,11 @@ object NavRoutes {
     const val TOOL_REFERENCE_SHEETS    = "tool/reference_sheets"
     const val TOOL_SIP_CALCULATOR      = "tool/sip_calculator"
     const val TOOL_ENCRYPTION          = "tool/encryption_tool"
+    const val TOOL_RANDOMIZER          = "tool/randomizer"
+    const val TOOL_EXIF                = "tool/exif_tool"
+    const val TOOL_STEGANOGRAPHY       = "tool/steganography"
+    const val TOOL_SOUND_METER         = "tool/sound_meter"
+    const val TOOL_MARKDOWN_EDITOR     = "tool/markdown_editor"
 
     // ── Route builders ────────────────────────────────────────────────────────
 

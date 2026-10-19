@@ -301,42 +301,59 @@ private fun TodoSection(
             }
         }
 
-        items(uiState.todos, key = { it.id }) { item ->
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { viewModel.toggleTodo(item.id) },
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = if (item.isCompleted) MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surfaceContainer
-                )
-            ) {
-                Row(
+        if (uiState.todos.isEmpty()) {
+            item {
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = spacing.md, vertical = spacing.sm),
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(vertical = spacing.xl),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = if (item.isCompleted) Icons.Filled.CheckCircle else Icons.Filled.RadioButtonUnchecked,
-                        contentDescription = null,
-                        tint = if (item.isCompleted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
-                    )
-                    Spacer(Modifier.width(12.dp))
                     Text(
-                        text = item.title,
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            textDecoration = if (item.isCompleted) TextDecoration.LineThrough else TextDecoration.None,
-                            fontWeight = if (item.isCompleted) FontWeight.Normal else FontWeight.Medium
-                        ),
-                        modifier = Modifier.weight(1f),
-                        color = if (item.isCompleted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface
+                        text = "No tasks yet. Add a task above!",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    IconButton(
-                        onClick = { viewModel.deleteTodo(item.id) },
-                        modifier = Modifier.size(32.dp)
+                }
+            }
+        } else {
+            items(uiState.todos, key = { it.id }) { item ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { viewModel.toggleTodo(item.id) },
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (item.isCompleted) MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surfaceContainer
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = spacing.md, vertical = spacing.sm),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(Icons.Filled.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.outline, modifier = Modifier.size(18.dp))
+                        Icon(
+                            imageVector = if (item.isCompleted) Icons.Filled.CheckCircle else Icons.Filled.RadioButtonUnchecked,
+                            contentDescription = null,
+                            tint = if (item.isCompleted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                        )
+                        Spacer(Modifier.width(12.dp))
+                        Text(
+                            text = item.title,
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                textDecoration = if (item.isCompleted) TextDecoration.LineThrough else TextDecoration.None,
+                                fontWeight = if (item.isCompleted) FontWeight.Normal else FontWeight.Medium
+                            ),
+                            modifier = Modifier.weight(1f),
+                            color = if (item.isCompleted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface
+                        )
+                        IconButton(
+                            onClick = { viewModel.deleteTodo(item.id) },
+                            modifier = Modifier.size(32.dp)
+                        ) {
+                            Icon(Icons.Filled.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.outline, modifier = Modifier.size(18.dp))
+                        }
                     }
                 }
             }
@@ -389,41 +406,58 @@ private fun HabitSection(
             }
         }
 
-        items(uiState.habits, key = { it.id }) { habit ->
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { viewModel.toggleHabit(habit.id) },
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = if (habit.isDoneToday) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainer
-                )
-            ) {
-                Row(
+        if (uiState.habits.isEmpty()) {
+            item {
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(spacing.md),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .padding(vertical = spacing.xl),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Column {
-                        Text(
-                            text = habit.name,
-                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                            color = if (habit.isDoneToday) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
-                        )
-                        Text(
-                            text = "🔥 ${habit.streakDays} day streak",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = if (habit.isDoneToday) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                    Text(
+                        text = "No habits tracked yet. Add your daily habits above!",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        } else {
+            items(uiState.habits, key = { it.id }) { habit ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { viewModel.toggleHabit(habit.id) },
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (habit.isDoneToday) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainer
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(spacing.md),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column {
+                            Text(
+                                text = habit.name,
+                                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                                color = if (habit.isDoneToday) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = "🔥 ${habit.streakDays} day streak",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = if (habit.isDoneToday) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        Icon(
+                            imageVector = if (habit.isDoneToday) Icons.Filled.CheckCircle else Icons.Filled.CheckCircleOutline,
+                            contentDescription = null,
+                            tint = if (habit.isDoneToday) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
+                            modifier = Modifier.size(28.dp)
                         )
                     }
-                    Icon(
-                        imageVector = if (habit.isDoneToday) Icons.Filled.CheckCircle else Icons.Filled.CheckCircleOutline,
-                        contentDescription = null,
-                        tint = if (habit.isDoneToday) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
-                        modifier = Modifier.size(28.dp)
-                    )
                 }
             }
         }

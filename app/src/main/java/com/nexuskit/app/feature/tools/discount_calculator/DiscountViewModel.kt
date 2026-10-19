@@ -13,12 +13,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class DiscountUiState(
-    val originalPriceStr: String = "100.00",
-    val discountPercent: Float = 20f,
+    val originalPriceStr: String = "",
+    val discountPercent: Float = 0f,
     val additionalDiscountPercent: Float = 0f,
     val taxPercent: Float = 0f,
     val currencySymbol: String = "$",
-    val result: DiscountResult = DiscountEngine.calculate(100.0, 20.0, 0.0, 0.0)
+    val result: DiscountResult = DiscountEngine.calculate(0.0, 0.0, 0.0, 0.0)
 )
 
 @HiltViewModel

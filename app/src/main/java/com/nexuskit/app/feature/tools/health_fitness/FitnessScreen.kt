@@ -189,19 +189,21 @@ private fun WaterIntakeView(uiState: FitnessUiState, viewModel: FitnessViewModel
             }
         }
 
-        item {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-            ) {
-                Column(modifier = Modifier.padding(spacing.md), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(spacing.xs)) {
-                    Text("Recommended Daily Water", style = MaterialTheme.typography.titleSmall)
-                    Text(
-                        text = String.format(java.util.Locale.US, "%.2f Liters", uiState.waterIntakeLiters),
-                        style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-                    )
-                    Text("≈ ${(uiState.waterIntakeLiters * 4.2).toInt()} standard glasses (250ml each)", style = MaterialTheme.typography.bodyMedium)
+        if (uiState.waterIntakeLiters > 0.0) {
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                ) {
+                    Column(modifier = Modifier.padding(spacing.md), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(spacing.xs)) {
+                        Text("Recommended Daily Water", style = MaterialTheme.typography.titleSmall)
+                        Text(
+                            text = String.format(java.util.Locale.US, "%.2f Liters", uiState.waterIntakeLiters),
+                            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                        )
+                        Text("≈ ${(uiState.waterIntakeLiters * 4.2).toInt()} standard glasses (250ml each)", style = MaterialTheme.typography.bodyMedium)
+                    }
                 }
             }
         }
@@ -252,26 +254,28 @@ private fun MacrosView(uiState: FitnessUiState, viewModel: FitnessViewModel, spa
             }
         }
 
-        item {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-            ) {
-                Column(modifier = Modifier.padding(spacing.md), verticalArrangement = Arrangement.spacedBy(spacing.sm)) {
-                    Text("Daily Target: ${uiState.macroResult.dailyCalories} kcal", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("${uiState.macroResult.proteinGrams}g", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
-                            Text("Protein", style = MaterialTheme.typography.labelMedium)
-                        }
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("${uiState.macroResult.carbsGrams}g", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
-                            Text("Carbs", style = MaterialTheme.typography.labelMedium)
-                        }
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("${uiState.macroResult.fatGrams}g", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
-                            Text("Fats", style = MaterialTheme.typography.labelMedium)
+        if (uiState.macroResult.dailyCalories > 0) {
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                ) {
+                    Column(modifier = Modifier.padding(spacing.md), verticalArrangement = Arrangement.spacedBy(spacing.sm)) {
+                        Text("Daily Target: ${uiState.macroResult.dailyCalories} kcal", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text("${uiState.macroResult.proteinGrams}g", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
+                                Text("Protein", style = MaterialTheme.typography.labelMedium)
+                            }
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text("${uiState.macroResult.carbsGrams}g", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
+                                Text("Carbs", style = MaterialTheme.typography.labelMedium)
+                            }
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text("${uiState.macroResult.fatGrams}g", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
+                                Text("Fats", style = MaterialTheme.typography.labelMedium)
+                            }
                         }
                     }
                 }
@@ -318,19 +322,21 @@ private fun IdealWeightView(uiState: FitnessUiState, viewModel: FitnessViewModel
             }
         }
 
-        item {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
-            ) {
-                Column(modifier = Modifier.padding(spacing.md), verticalArrangement = Arrangement.spacedBy(spacing.xs)) {
-                    uiState.idealWeightResults.forEach { (formula, kg) ->
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(formula, style = MaterialTheme.typography.bodyMedium)
-                            Text(String.format(java.util.Locale.US, "%.1f kg (%.1f lbs)", kg, kg * 2.20462), style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary))
+        if (uiState.idealWeightResults.isNotEmpty()) {
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+                ) {
+                    Column(modifier = Modifier.padding(spacing.md), verticalArrangement = Arrangement.spacedBy(spacing.xs)) {
+                        uiState.idealWeightResults.forEach { (formula, kg) ->
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                Text(formula, style = MaterialTheme.typography.bodyMedium)
+                                Text(String.format(java.util.Locale.US, "%.1f kg (%.1f lbs)", kg, kg * 2.20462), style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary))
+                            }
+                            HorizontalDivider()
                         }
-                        HorizontalDivider()
                     }
                 }
             }
@@ -373,19 +379,21 @@ private fun OneRepMaxView(uiState: FitnessUiState, viewModel: FitnessViewModel, 
             }
         }
 
-        item {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-            ) {
-                Column(modifier = Modifier.padding(spacing.md), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(spacing.xs)) {
-                    Text("Estimated 1-Rep Max", style = MaterialTheme.typography.titleSmall)
-                    Text(
-                        text = String.format(java.util.Locale.US, "%.1f kg", uiState.estimated1Rm),
-                        style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-                    )
-                    Text("≈ ${(uiState.estimated1Rm * 2.20462).toInt()} lbs", style = MaterialTheme.typography.bodyMedium)
+        if (uiState.estimated1Rm > 0.0) {
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                ) {
+                    Column(modifier = Modifier.padding(spacing.md), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(spacing.xs)) {
+                        Text("Estimated 1-Rep Max", style = MaterialTheme.typography.titleSmall)
+                        Text(
+                            text = String.format(java.util.Locale.US, "%.1f kg", uiState.estimated1Rm),
+                            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                        )
+                        Text("≈ ${(uiState.estimated1Rm * 2.20462).toInt()} lbs", style = MaterialTheme.typography.bodyMedium)
+                    }
                 }
             }
         }
@@ -418,19 +426,21 @@ private fun HeartRateView(uiState: FitnessUiState, viewModel: FitnessViewModel, 
             }
         }
 
-        item {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
-            ) {
-                Column(modifier = Modifier.padding(spacing.md), verticalArrangement = Arrangement.spacedBy(spacing.sm)) {
-                    Text("Max Heart Rate: ${uiState.hrZones.maxHr} BPM", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
-                    ZoneRow("Zone 1: Active Recovery (50-60%)", "${uiState.hrZones.zone1Recovery.first} - ${uiState.hrZones.zone1Recovery.last} BPM")
-                    ZoneRow("Zone 2: Aerobic Endurance (60-70%)", "${uiState.hrZones.zone2Aerobic.first} - ${uiState.hrZones.zone2Aerobic.last} BPM")
-                    ZoneRow("Zone 3: Tempo / Stamina (70-80%)", "${uiState.hrZones.zone3Tempo.first} - ${uiState.hrZones.zone3Tempo.last} BPM")
-                    ZoneRow("Zone 4: Threshold (80-90%)", "${uiState.hrZones.zone4Threshold.first} - ${uiState.hrZones.zone4Threshold.last} BPM")
-                    ZoneRow("Zone 5: Anaerobic Max (90-100%)", "${uiState.hrZones.zone5Anaerobic.first} - ${uiState.hrZones.zone5Anaerobic.last} BPM")
+        if (uiState.hrZones.maxHr > 0) {
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+                ) {
+                    Column(modifier = Modifier.padding(spacing.md), verticalArrangement = Arrangement.spacedBy(spacing.sm)) {
+                        Text("Max Heart Rate: ${uiState.hrZones.maxHr} BPM", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
+                        ZoneRow("Zone 1: Active Recovery (50-60%)", "${uiState.hrZones.zone1Recovery.first} - ${uiState.hrZones.zone1Recovery.last} BPM")
+                        ZoneRow("Zone 2: Aerobic Endurance (60-70%)", "${uiState.hrZones.zone2Aerobic.first} - ${uiState.hrZones.zone2Aerobic.last} BPM")
+                        ZoneRow("Zone 3: Tempo / Stamina (70-80%)", "${uiState.hrZones.zone3Tempo.first} - ${uiState.hrZones.zone3Tempo.last} BPM")
+                        ZoneRow("Zone 4: Threshold (80-90%)", "${uiState.hrZones.zone4Threshold.first} - ${uiState.hrZones.zone4Threshold.last} BPM")
+                        ZoneRow("Zone 5: Anaerobic Max (90-100%)", "${uiState.hrZones.zone5Anaerobic.first} - ${uiState.hrZones.zone5Anaerobic.last} BPM")
+                    }
                 }
             }
         }
@@ -519,16 +529,18 @@ private fun PaceView(uiState: FitnessUiState, viewModel: FitnessViewModel, spaci
             }
         }
 
-        item {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-            ) {
-                Column(modifier = Modifier.padding(spacing.md), verticalArrangement = Arrangement.spacedBy(spacing.xs)) {
-                    Text("Calculated Performance", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
-                    Text("Average Pace: ${uiState.calculatedPace}", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
-                    Text("Average Speed: ${uiState.calculatedSpeed}", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
+        if (uiState.calculatedPace.isNotEmpty()) {
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                ) {
+                    Column(modifier = Modifier.padding(spacing.md), verticalArrangement = Arrangement.spacedBy(spacing.xs)) {
+                        Text("Calculated Performance", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
+                        Text("Average Pace: ${uiState.calculatedPace}", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
+                        Text("Average Speed: ${uiState.calculatedSpeed}", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
+                    }
                 }
             }
         }

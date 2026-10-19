@@ -32,17 +32,32 @@ object RandomizerEngine {
         val low = kotlin.math.min(min, max)
         val high = kotlin.math.max(min, max)
         val safeCount = count.coerceIn(1, 100)
+        val rangeSize = high.toLong() - low.toLong() + 1L
 
-        val results = if (unique && (high - low + 1) >= safeCount) {
-            val pool = (low..high).toMutableList()
-            val list = mutableListOf<Int>()
-            repeat(safeCount) {
-                val idx = random.nextInt(pool.size)
-                list.add(pool.removeAt(idx))
+        val results = if (unique && rangeSize >= safeCount) {
+            val set = linkedSetOf<Int>()
+            var attempts = 0
+            val maxAttempts = safeCount * 100
+            while (set.size < safeCount && attempts < maxAttempts) {
+                val offset = (random.nextDouble() * rangeSize).toLong().coerceIn(0L, rangeSize - 1L)
+                set.add((low.toLong() + offset).toInt())
+                attempts++
             }
-            list
+            // If collision rate was too high (dense pool), fill remainder
+            if (set.size < safeCount) {
+                var cur = low
+                while (set.size < safeCount && cur <= high) {
+                    set.add(cur)
+                    if (cur == Int.MAX_VALUE) break
+                    cur++
+                }
+            }
+            set.toList()
         } else {
-            (1..safeCount).map { random.nextInt(high - low + 1) + low }
+            (1..safeCount).map {
+                val offset = (random.nextDouble() * rangeSize).toLong().coerceIn(0L, rangeSize - 1L)
+                (low.toLong() + offset).toInt()
+            }
         }
 
         return NumberRangeResult(results, low, high)

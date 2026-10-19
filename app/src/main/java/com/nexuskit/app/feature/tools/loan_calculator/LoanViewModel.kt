@@ -13,11 +13,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class LoanUiState(
-    val principalStr: String = "25000",
+    val principalStr: String = "",
     val annualRatePercent: Float = 7.5f,
     val tenureYears: Int = 3,
     val currencySymbol: String = "$",
-    val result: LoanResult = LoanEngine.calculateEmi(25000.0, 7.5, 36)
+    val result: LoanResult = LoanEngine.calculateEmi(0.0, 7.5, 36)
 )
 
 @HiltViewModel

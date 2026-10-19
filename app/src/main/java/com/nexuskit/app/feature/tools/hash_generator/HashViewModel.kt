@@ -13,10 +13,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class HashUiState(
-    val inputText: String = "Hello NexusKit",
+    val inputText: String = "",
     val hmacKey: String = "",
     val uppercase: Boolean = false,
-    val hashes: List<HashResultItem> = HashEngine.generateHashes("Hello NexusKit", "", false)
+    val hashes: List<HashResultItem> = emptyList()
 )
 
 @HiltViewModel
