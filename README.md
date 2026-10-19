@@ -4,7 +4,7 @@
 ### *The Ultimate Offline Utility & Productivity Suite for Android*
 
 [![Android](https://img.shields.io/badge/Platform-Android%2010%2B%20(API%2029%2B)-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://android.com)
-[![Version](https://img.shields.io/badge/Version-v1.2.0-blue?style=for-the-badge)](https://github.com/Pranjalbudaniya/NexusKit/releases)
+[![Version](https://img.shields.io/badge/Version-v1.3.0-blue?style=for-the-badge)](https://github.com/Pranjalbudaniya/NexusKit/releases)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Compose](https://img.shields.io/badge/Jetpack%20Compose-2024.10.00-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
 [![Clean Architecture](https://img.shields.io/badge/Architecture-Clean%20%2B%20MVI%2FMVVM-F43F5E?style=for-the-badge)]()
