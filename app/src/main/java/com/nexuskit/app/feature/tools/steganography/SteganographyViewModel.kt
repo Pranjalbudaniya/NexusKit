@@ -1,10 +1,12 @@
 package com.nexuskit.app.feature.tools.steganography
 
 import android.app.Application
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.nexuskit.app.core.util.GallerySaver
 import com.nexuskit.app.domain.usecase.tool.TrackToolOpenedUseCase
 import com.nexuskit.app.domain.usecase.tool.TrackToolParams
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,12 +32,14 @@ data class StegoUiState(
     val isEncoding: Boolean = false,
     val encodeResult: StegoEncodeResult? = null,
     val encodeError: String? = null,
+    val isSavedToGallery: Boolean = false,
     // Decode state
     val decodeImageUri: Uri? = null,
     val decodePassword: String = "",
     val isDecoding: Boolean = false,
     val decodeResult: StegoDecodeResult? = null,
-    val decodeError: String? = null
+    val decodeError: String? = null,
+    val toastMessage: String? = null
 )
 
 @HiltViewModel
@@ -72,7 +76,8 @@ class SteganographyViewModel @Inject constructor(
                     coverImageUri = uri,
                     coverCapacityBytes = capacity,
                     encodeResult = null,
-                    encodeError = null
+                    encodeError = null,
+                    isSavedToGallery = false
                 )
             }
         }
@@ -83,7 +88,7 @@ class SteganographyViewModel @Inject constructor(
     }
 
     fun onEncodePasswordChanged(pass: String) {
-        _uiState.update { it.copy(encodePassword = pass) }
+        _uiState.update { it.copy(encodePassword = pass, encodeError = null) }
     }
 
     fun encode() {
@@ -94,7 +99,7 @@ class SteganographyViewModel @Inject constructor(
             return
         }
         if (current.encodeMessage.isBlank()) {
-            _uiState.update { it.copy(encodeError = "Please enter a secret message to hide") }
+            _uiState.update { it.copy(encodeError = "Please enter a secret message") }
             return
         }
 
@@ -108,10 +113,30 @@ class SteganographyViewModel @Inject constructor(
             )
             res.fold(
                 onSuccess = { result ->
-                    _uiState.update { it.copy(isEncoding = false, encodeResult = result, encodeError = null) }
+                    _uiState.update { it.copy(isEncoding = false, encodeResult = result, encodeError = null, isSavedToGallery = false) }
                 },
                 onFailure = { error ->
                     _uiState.update { it.copy(isEncoding = false, encodeError = error.message ?: "Encoding failed") }
+                }
+            )
+        }
+    }
+
+    fun saveToGallery(context: Context) {
+        val file = _uiState.value.encodeResult?.outputFile ?: return
+        viewModelScope.launch(Dispatchers.IO) {
+            val res = GallerySaver.saveFileToGallery(
+                context = context,
+                file = file,
+                displayName = "Stego_${System.currentTimeMillis()}",
+                mimeType = "image/png"
+            )
+            res.fold(
+                onSuccess = {
+                    _uiState.update { it.copy(isSavedToGallery = true, toastMessage = "Saved to Gallery (Pictures/NexusKit)") }
+                },
+                onFailure = { err ->
+                    _uiState.update { it.copy(toastMessage = "Failed to save: ${err.localizedMessage}") }
                 }
             )
         }
@@ -156,5 +181,9 @@ class SteganographyViewModel @Inject constructor(
                 }
             )
         }
+    }
+
+    fun clearToast() {
+        _uiState.update { it.copy(toastMessage = null) }
     }
 }

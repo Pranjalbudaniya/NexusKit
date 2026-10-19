@@ -222,7 +222,7 @@ object ToolRegistry {
             name           = "Developer Tools",
             description    = "JSON formatter & validator, Base64/URL encoder-decoder, regex tester and device specs",
             iconName       = "Code",
-            categoryId     = "utilities",
+            categoryId     = "developer",
             route          = "tool/developer_tools",
             searchKeywords = listOf("developer", "json", "base64", "url", "encode", "decode", "regex", "specs", "device")
         ),
@@ -306,15 +306,130 @@ object ToolRegistry {
             categoryId     = "utilities",
             route          = "tool/sound_meter",
             searchKeywords = listOf("sound", "decibel", "db", "noise", "spl", "meter", "microphone", "loudness", "audio")
+        ),
+
+        // ── DEVELOPER TOOLS ──────────────────────────────────────────────────
+        ToolInfo(
+            id             = "jwt_decoder",
+            name           = "JWT Decoder",
+            description    = "Decode JSON Web Tokens, inspect header, payload claims, expiration and verify HS256 signatures offline",
+            iconName       = "Key",
+            categoryId     = "developer",
+            route          = "tool/jwt_decoder",
+            searchKeywords = listOf("jwt", "token", "decode", "json web token", "claims", "bearer", "auth", "signature", "verify")
+        ),
+        ToolInfo(
+            id             = "json_converter",
+            name           = "JSON / CSV / YAML",
+            description    = "Bidirectional conversion between JSON, CSV and YAML with nested object flattening and formatting",
+            iconName       = "Transform",
+            categoryId     = "developer",
+            route          = "tool/json_converter",
+            searchKeywords = listOf("json", "csv", "yaml", "converter", "flatten", "table", "data", "transform")
+        ),
+        ToolInfo(
+            id             = "unix_timestamp",
+            name           = "Unix Timestamp Converter",
+            description    = "Live epoch clock, convert seconds & milliseconds to UTC / Local date and time with relative offsets",
+            iconName       = "Schedule",
+            categoryId     = "developer",
+            route          = "tool/unix_timestamp",
+            searchKeywords = listOf("unix", "timestamp", "epoch", "time", "date", "clock", "seconds", "millis", "utc")
+        ),
+        ToolInfo(
+            id             = "cron_explainer",
+            name           = "Cron Expression Explainer",
+            description    = "Translate cron expressions into plain English, view schedule breakdowns and next 5 run times",
+            iconName       = "EventRepeat",
+            categoryId     = "developer",
+            route          = "tool/cron_explainer",
+            searchKeywords = listOf("cron", "schedule", "explainer", "crontab", "time", "interval", "timer", "job")
+        ),
+
+        // ── TEXT & UTILITIES ────────────────────────────────────────────────
+        ToolInfo(
+            id             = "lorem_generator",
+            name           = "Lorem Ipsum Generator",
+            description    = "Generate customizable placeholder text, paragraphs, sentences and words with themes (Classic, Tech, Cyber)",
+            iconName       = "FormatQuote",
+            categoryId     = "text",
+            route          = "tool/lorem_generator",
+            searchKeywords = listOf("lorem", "ipsum", "placeholder", "dummy", "text", "generator", "words", "paragraphs")
+        ),
+        ToolInfo(
+            id             = "line_sorter",
+            name           = "Line Sorter & Frequency",
+            description    = "Sort lines alphabetically, naturally, remove duplicates, trim spaces, add numbers, and count word frequencies",
+            iconName       = "Sort",
+            categoryId     = "text",
+            route          = "tool/line_sorter",
+            searchKeywords = listOf("sort", "lines", "duplicate", "dedupe", "unique", "frequency", "word count", "alphabetical")
+        ),
+        ToolInfo(
+            id             = "fancy_text",
+            name           = "Fancy Text & Unicode",
+            description    = "Convert plain text into 25+ aesthetic Unicode styles (Bold, Script, Gothic, Fullwidth, Circles, Glitch)",
+            iconName       = "AutoAwesome",
+            categoryId     = "text",
+            route          = "tool/fancy_text",
+            searchKeywords = listOf("fancy", "unicode", "font", "aesthetic", "gothic", "cursive", "bold", "italic", "bubble")
+        ),
+        ToolInfo(
+            id             = "text_to_speech",
+            name           = "Offline Text-to-Speech",
+            description    = "Natural voice speech synthesizer using Android's built-in offline TTS engine with rate and pitch controls",
+            iconName       = "RecordVoiceOver",
+            categoryId     = "text",
+            route          = "tool/text_to_speech",
+            searchKeywords = listOf("tts", "speech", "voice", "speak", "text to speech", "read aloud", "audio", "offline")
+        ),
+
+        // ── GENERATORS & SECURITY ───────────────────────────────────────────
+        ToolInfo(
+            id             = "barcode_generator",
+            name           = "Barcode Generator",
+            description    = "Generate Code128, EAN-13, EAN-8, UPC-A, ITF and Codabar barcodes with direct Gallery download",
+            iconName       = "QrCode",
+            categoryId     = "generators",
+            route          = "tool/barcode_generator",
+            searchKeywords = listOf("barcode", "code128", "ean", "ean13", "upc", "retail", "scan", "gallery", "generator")
+        ),
+        ToolInfo(
+            id             = "diceware_generator",
+            name           = "Diceware & Password Audit",
+            description    = "Generate cryptographically secure memorable Diceware passphrases and audit password crack times",
+            iconName       = "Security",
+            categoryId     = "generators",
+            route          = "tool/diceware_generator",
+            searchKeywords = listOf("diceware", "passphrase", "password", "strength", "audit", "entropy", "security", "crack time")
+        ),
+        ToolInfo(
+            id             = "gradient_generator",
+            name           = "Gradient Studio",
+            description    = "Design vibrant linear, radial and sweep gradients, export CSS/Compose code and save HD wallpapers to Gallery",
+            iconName       = "Palette",
+            categoryId     = "generators",
+            route          = "tool/gradient_generator",
+            searchKeywords = listOf("gradient", "wallpaper", "css", "compose", "colors", "radial", "linear", "gallery", "palette")
+        ),
+        ToolInfo(
+            id             = "totp_authenticator",
+            name           = "2FA Authenticator",
+            description    = "Offline RFC 6238 two-factor authentication (2FA) code generator with animated countdown ring and local storage",
+            iconName       = "Security",
+            categoryId     = "utilities",
+            route          = "tool/totp_authenticator",
+            searchKeywords = listOf("totp", "2fa", "authenticator", "otp", "security", "token", "code", "offline", "two factor")
         )
     )
 
     val allCategories: List<CategoryInfo> = listOf(
         CategoryInfo(id = "number_maths", name = "Number & Maths", iconName = "Calculate",    order = 0),
-        CategoryInfo(id = "utilities",    name = "Utilities",      iconName = "Build",        order = 1),
-        CategoryInfo(id = "converters",   name = "Converters",     iconName = "SwapHoriz",    order = 2),
-        CategoryInfo(id = "text",         name = "Text Tools",     iconName = "TextFields",   order = 3),
-        CategoryInfo(id = "generators",   name = "Generators",     iconName = "AutoAwesome",  order = 4)
+        CategoryInfo(id = "developer",    name = "Developer Tools",iconName = "Code",         order = 1),
+        CategoryInfo(id = "utilities",    name = "Utilities",      iconName = "Build",        order = 2),
+        CategoryInfo(id = "converters",   name = "Converters",     iconName = "SwapHoriz",    order = 3),
+        CategoryInfo(id = "text",         name = "Text Tools",     iconName = "TextFields",   order = 4),
+        CategoryInfo(id = "generators",   name = "Generators",     iconName = "AutoAwesome",  order = 5)
     )
 
     // ── Lookup helpers ────────────────────────────────────────────────────────

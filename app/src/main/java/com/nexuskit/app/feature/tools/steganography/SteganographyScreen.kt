@@ -35,6 +35,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -88,6 +89,13 @@ fun SteganographyScreen(
     val clipboard = LocalClipboardManager.current
 
     var passwordVisible by remember { mutableStateOf(false) }
+
+    androidx.compose.runtime.LaunchedEffect(uiState.toastMessage) {
+        uiState.toastMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.clearToast()
+        }
+    }
 
     val coverPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -351,25 +359,51 @@ fun SteganographyScreen(
                                         color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f)
                                     )
 
-                                    Button(
-                                        onClick = {
-                                            val shareUri = FileProvider.getUriForFile(
-                                                context,
-                                                "${context.packageName}.fileprovider",
-                                                res.outputFile
-                                            )
-                                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                                type = "image/png"
-                                                putExtra(Intent.EXTRA_STREAM, shareUri)
-                                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                            }
-                                            context.startActivity(Intent.createChooser(shareIntent, "Share Stego Image (PNG)"))
-                                        },
-                                        modifier = Modifier.fillMaxWidth(),
-                                        shape = RoundedCornerShape(10.dp)
+                                    Surface(
+                                        shape = RoundedCornerShape(8.dp),
+                                        color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f)
                                     ) {
-                                        Icon(Icons.Filled.Share, contentDescription = null, modifier = Modifier.padding(end = spacing.xs))
-                                        Text("Share / Save Stego PNG")
+                                        Text(
+                                            text = "Note: Always share or store as a lossless PNG. Chat apps like WhatsApp or Telegram compress images into lossy JPEGs, which will corrupt the hidden bits.",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier.padding(spacing.sm)
+                                        )
+                                    }
+
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.spacedBy(spacing.sm)
+                                    ) {
+                                        Button(
+                                            onClick = { viewModel.saveToGallery(context) },
+                                            modifier = Modifier.weight(1f),
+                                            shape = RoundedCornerShape(10.dp)
+                                        ) {
+                                            Icon(Icons.Filled.CheckCircle, contentDescription = null, modifier = Modifier.padding(end = spacing.xxs).size(18.dp))
+                                            Text(if (uiState.isSavedToGallery) "Saved in Gallery" else "Save to Gallery")
+                                        }
+
+                                        FilledTonalButton(
+                                            onClick = {
+                                                val shareUri = FileProvider.getUriForFile(
+                                                    context,
+                                                    "${context.packageName}.fileprovider",
+                                                    res.outputFile
+                                                )
+                                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                                    type = "image/png"
+                                                    putExtra(Intent.EXTRA_STREAM, shareUri)
+                                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                                }
+                                                context.startActivity(Intent.createChooser(shareIntent, "Share Stego Image (PNG)"))
+                                            },
+                                            modifier = Modifier.weight(1f),
+                                            shape = RoundedCornerShape(10.dp)
+                                        ) {
+                                            Icon(Icons.Filled.Share, contentDescription = null, modifier = Modifier.padding(end = spacing.xxs).size(18.dp))
+                                            Text("Share")
+                                        }
                                     }
                                 }
                             }

@@ -1,6 +1,7 @@
 package com.nexuskit.app.feature.tools.qr_generator
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.SaveAlt
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -29,6 +31,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -178,6 +181,7 @@ fun QrGeneratorScreen(
                                 OutlinedButton(
                                     onClick = {
                                         clipboardManager.setText(AnnotatedString(uiState.rawPayload))
+                                        Toast.makeText(context, "Text copied", Toast.LENGTH_SHORT).show()
                                     },
                                     shape = MaterialTheme.shapes.medium
                                 ) {
@@ -187,10 +191,41 @@ fun QrGeneratorScreen(
                                         modifier = Modifier.size(18.dp)
                                     )
                                     Spacer(modifier = Modifier.size(spacing.xs))
-                                    Text("Copy Text")
+                                    Text("Copy")
                                 }
 
                                 Button(
+                                    onClick = {
+                                        val bmp = uiState.qrBitmap
+                                        if (bmp != null) {
+                                            val res = com.nexuskit.app.core.util.GallerySaver.saveBitmapToGallery(
+                                                context = context,
+                                                bitmap = bmp,
+                                                displayName = "QRCode_${System.currentTimeMillis()}"
+                                            )
+                                            res.fold(
+                                                onSuccess = {
+                                                    Toast.makeText(context, "QR Code saved to Gallery (Pictures/NexusKit)", Toast.LENGTH_SHORT).show()
+                                                },
+                                                onFailure = {
+                                                    Toast.makeText(context, "Failed to save QR Code: ${it.localizedMessage}", Toast.LENGTH_SHORT).show()
+                                                }
+                                            )
+                                        }
+                                    },
+                                    enabled = uiState.qrBitmap != null,
+                                    shape = MaterialTheme.shapes.medium
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.SaveAlt,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                    Spacer(modifier = Modifier.size(spacing.xs))
+                                    Text("Save to Gallery")
+                                }
+
+                                FilledTonalButton(
                                     onClick = {
                                         val sendIntent = Intent().apply {
                                             action = Intent.ACTION_SEND
@@ -200,10 +235,7 @@ fun QrGeneratorScreen(
                                         val shareIntent = Intent.createChooser(sendIntent, "Share QR Content")
                                         context.startActivity(shareIntent)
                                     },
-                                    shape = MaterialTheme.shapes.medium,
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.primary
-                                    )
+                                    shape = MaterialTheme.shapes.medium
                                 ) {
                                     Icon(
                                         imageVector = Icons.Filled.Share,

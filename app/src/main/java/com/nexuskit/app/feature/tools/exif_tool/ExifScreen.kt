@@ -83,6 +83,13 @@ fun ExifScreen(
     val context = LocalContext.current
     val clipboard = LocalClipboardManager.current
 
+    androidx.compose.runtime.LaunchedEffect(uiState.toastMessage) {
+        uiState.toastMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.clearToast()
+        }
+    }
+
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -353,26 +360,40 @@ fun ExifScreen(
                                         color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
                                     )
 
-                                    Button(
-                                        onClick = {
-                                            val file = uiState.cleanedFile ?: return@Button
-                                            val shareUri = FileProvider.getUriForFile(
-                                                context,
-                                                "${context.packageName}.fileprovider",
-                                                file
-                                            )
-                                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                                type = "image/jpeg"
-                                                putExtra(Intent.EXTRA_STREAM, shareUri)
-                                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                            }
-                                            context.startActivity(Intent.createChooser(shareIntent, "Share Cleaned Photo"))
-                                        },
+                                    Row(
                                         modifier = Modifier.fillMaxWidth(),
-                                        shape = RoundedCornerShape(10.dp)
+                                        horizontalArrangement = Arrangement.spacedBy(spacing.sm)
                                     ) {
-                                        Icon(Icons.Filled.Share, contentDescription = null, modifier = Modifier.padding(end = spacing.xs))
-                                        Text("Share Cleaned Photo")
+                                        Button(
+                                            onClick = { viewModel.saveCleanedToGallery(context) },
+                                            modifier = Modifier.weight(1f),
+                                            shape = RoundedCornerShape(10.dp)
+                                        ) {
+                                            Icon(Icons.Filled.CheckCircle, contentDescription = null, modifier = Modifier.padding(end = spacing.xxs).size(18.dp))
+                                            Text(if (uiState.isSavedToGallery) "Saved in Gallery" else "Save to Gallery")
+                                        }
+
+                                        FilledTonalButton(
+                                            onClick = {
+                                                val file = uiState.cleanedFile ?: return@FilledTonalButton
+                                                val shareUri = FileProvider.getUriForFile(
+                                                    context,
+                                                    "${context.packageName}.fileprovider",
+                                                    file
+                                                )
+                                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                                    type = "image/jpeg"
+                                                    putExtra(Intent.EXTRA_STREAM, shareUri)
+                                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                                }
+                                                context.startActivity(Intent.createChooser(shareIntent, "Share Cleaned Photo"))
+                                            },
+                                            modifier = Modifier.weight(1f),
+                                            shape = RoundedCornerShape(10.dp)
+                                        ) {
+                                            Icon(Icons.Filled.Share, contentDescription = null, modifier = Modifier.padding(end = spacing.xxs).size(18.dp))
+                                            Text("Share")
+                                        }
                                     }
                                 }
                             }

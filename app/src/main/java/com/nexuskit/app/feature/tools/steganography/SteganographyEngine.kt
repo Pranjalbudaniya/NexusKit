@@ -48,9 +48,16 @@ object SteganographyEngine {
                 throw IllegalArgumentException("Secret message cannot be empty")
             }
 
+            val decodeOpts = BitmapFactory.Options().apply {
+                inPreferredConfig = Bitmap.Config.ARGB_8888
+                inPremultiplied = false
+                inDither = false
+                inScaled = false
+            }
+
             val inputStream = context.contentResolver.openInputStream(imageUri)
                 ?: throw IllegalArgumentException("Could not read cover image")
-            val originalBitmap = BitmapFactory.decodeStream(inputStream)
+            val originalBitmap = BitmapFactory.decodeStream(inputStream, null, decodeOpts)
                 ?: throw IllegalArgumentException("Failed to decode cover image bitmap")
 
             val width = originalBitmap.width
@@ -93,7 +100,7 @@ object SteganographyEngine {
                 throw IllegalArgumentException("Message is too large (${payloadBuffer.size} bytes). Image capacity is only $capacityBytes bytes. Select a larger photo.")
             }
 
-            // Create mutable copy of bitmap
+            // Create mutable copy of bitmap in ARGB_8888 format
             val stegoBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true)
             var byteIdx = 0
             var bitIdx = 7 // Read bits from MSB to LSB of each byte
@@ -106,7 +113,6 @@ object SteganographyEngine {
                     if (bitsWritten >= totalPayloadBits) break@outer
 
                     val pixel = stegoBitmap.getPixel(x, y)
-                    val alpha = (pixel shr 24) and 0xFF
                     var r = (pixel shr 16) and 0xFF
                     var g = (pixel shr 8) and 0xFF
                     var b = pixel and 0xFF
@@ -147,7 +153,8 @@ object SteganographyEngine {
                         }
                     }
 
-                    val newPixel = (alpha shl 24) or (r shl 16) or (g shl 8) or b
+                    // Force Alpha to 0xFF to avoid any premultiplication color-altering artifacts
+                    val newPixel = (0xFF shl 24) or (r shl 16) or (g shl 8) or b
                     stegoBitmap.setPixel(x, y, newPixel)
                 }
             }
@@ -177,110 +184,120 @@ object SteganographyEngine {
         password: String? = null
     ): Result<StegoDecodeResult> {
         return runCatching {
+            val decodeOpts = BitmapFactory.Options().apply {
+                inPreferredConfig = Bitmap.Config.ARGB_8888
+                inPremultiplied = false
+                inDither = false
+                inScaled = false
+            }
+
             val inputStream = context.contentResolver.openInputStream(imageUri)
                 ?: throw IllegalArgumentException("Could not read stego image")
-            val bitmap = BitmapFactory.decodeStream(inputStream)
+            val bitmap = BitmapFactory.decodeStream(inputStream, null, decodeOpts)
                 ?: throw IllegalArgumentException("Failed to decode stego image bitmap")
 
-            val width = bitmap.width
-            val height = bitmap.height
+            decodeFromBitmap(bitmap, password)
+        }
+    }
 
-            // Helper iterator to extract bits sequentially
-            class BitReader {
-                var x = 0
-                var y = 0
-                var channel = 0 // 0=R, 1=G, 2=B
-                var curPixel = if (width > 0 && height > 0) bitmap.getPixel(0, 0) else 0
+    fun decodeFromBitmap(bitmap: Bitmap, password: String? = null): StegoDecodeResult {
+        val width = bitmap.width
+        val height = bitmap.height
 
-                fun nextBit(): Int {
-                    if (y >= height) throw IllegalArgumentException("Premature end of image data")
-                    val bit = when (channel) {
-                        0 -> (curPixel shr 16) and 1
-                        1 -> (curPixel shr 8) and 1
-                        else -> curPixel and 1
-                    }
-                    channel++
-                    if (channel > 2) {
-                        channel = 0
-                        x++
-                        if (x >= width) {
-                            x = 0
-                            y++
-                        }
-                        if (y < height) {
-                            curPixel = bitmap.getPixel(x, y)
-                        }
-                    }
-                    return bit
+        class BitReader {
+            var x = 0
+            var y = 0
+            var channel = 0 // 0=R, 1=G, 2=B
+            var curPixel = if (width > 0 && height > 0) bitmap.getPixel(0, 0) else 0
+
+            fun nextBit(): Int {
+                if (y >= height) throw IllegalArgumentException("Premature end of image data")
+                val bit = when (channel) {
+                    0 -> (curPixel shr 16) and 1
+                    1 -> (curPixel shr 8) and 1
+                    else -> curPixel and 1
                 }
-
-                fun nextByte(): Byte {
-                    var b = 0
-                    for (i in 7 downTo 0) {
-                        b = b or (nextBit() shl i)
+                channel++
+                if (channel > 2) {
+                    channel = 0
+                    x++
+                    if (x >= width) {
+                        x = 0
+                        y++
                     }
-                    return b.toByte()
-                }
-
-                fun nextBytes(count: Int): ByteArray {
-                    val arr = ByteArray(count)
-                    for (i in 0 until count) {
-                        arr[i] = nextByte()
+                    if (y < height) {
+                        curPixel = bitmap.getPixel(x, y)
                     }
-                    return arr
                 }
-
-                fun nextInt(): Int {
-                    val b0 = nextByte().toInt() and 0xFF
-                    val b1 = nextByte().toInt() and 0xFF
-                    val b2 = nextByte().toInt() and 0xFF
-                    val b3 = nextByte().toInt() and 0xFF
-                    return (b0 shl 24) or (b1 shl 16) or (b2 shl 8) or b3
-                }
+                return bit
             }
 
-            val reader = BitReader()
-
-            // 1. Verify Magic
-            val readMagic = reader.nextBytes(4)
-            if (!readMagic.contentEquals(MAGIC)) {
-                throw IllegalArgumentException("No hidden message detected. This image was not encoded with NexusKit Steganography.")
-            }
-
-            // 2. Read Flag & Payload Length
-            val flag = reader.nextByte()
-            val isEncrypted = (flag == FLAG_ENCRYPTED)
-            val payloadLength = reader.nextInt()
-
-            if (payloadLength <= 0 || payloadLength > width * height) {
-                throw IllegalArgumentException("Corrupted steganography header or invalid payload length ($payloadLength).")
-            }
-
-            if (isEncrypted) {
-                if (password.isNullOrBlank()) {
-                    throw IllegalArgumentException("This hidden message is encrypted with a password. Please enter the password to decode it.")
+            fun nextByte(): Byte {
+                var b = 0
+                for (i in 7 downTo 0) {
+                    b = b or (nextBit() shl i)
                 }
-                val salt = reader.nextBytes(16)
-                val iv = reader.nextBytes(16)
-                val ciphertext = reader.nextBytes(payloadLength)
-
-                val decryptedBytes = runCatching {
-                    decryptAes(ciphertext, password, salt, iv)
-                }.getOrElse {
-                    throw IllegalArgumentException("Incorrect password or corrupted steganography payload.")
-                }
-
-                StegoDecodeResult(
-                    message = String(decryptedBytes, Charsets.UTF_8),
-                    isEncrypted = true
-                )
-            } else {
-                val plainBytes = reader.nextBytes(payloadLength)
-                StegoDecodeResult(
-                    message = String(plainBytes, Charsets.UTF_8),
-                    isEncrypted = false
-                )
+                return b.toByte()
             }
+
+            fun nextBytes(count: Int): ByteArray {
+                val arr = ByteArray(count)
+                for (i in 0 until count) {
+                    arr[i] = nextByte()
+                }
+                return arr
+            }
+
+            fun nextInt(): Int {
+                val b0 = nextByte().toInt() and 0xFF
+                val b1 = nextByte().toInt() and 0xFF
+                val b2 = nextByte().toInt() and 0xFF
+                val b3 = nextByte().toInt() and 0xFF
+                return (b0 shl 24) or (b1 shl 16) or (b2 shl 8) or b3
+            }
+        }
+
+        val reader = BitReader()
+
+        // 1. Verify Magic header
+        val readMagic = reader.nextBytes(4)
+        if (!readMagic.contentEquals(MAGIC)) {
+            throw IllegalArgumentException("No hidden message detected. Ensure the image was saved as a lossless PNG and not compressed by chat apps.")
+        }
+
+        // 2. Read Flag & Payload Length
+        val flag = reader.nextByte()
+        val isEncrypted = (flag == FLAG_ENCRYPTED)
+        val payloadLength = reader.nextInt()
+
+        if (payloadLength <= 0 || payloadLength > width * height) {
+            throw IllegalArgumentException("Corrupted steganography header or invalid payload length ($payloadLength).")
+        }
+
+        if (isEncrypted) {
+            if (password.isNullOrBlank()) {
+                throw IllegalArgumentException("This hidden message is password-protected. Please enter the password to decode it.")
+            }
+            val salt = reader.nextBytes(16)
+            val iv = reader.nextBytes(16)
+            val ciphertext = reader.nextBytes(payloadLength)
+
+            val decryptedBytes = runCatching {
+                decryptAes(ciphertext, password, salt, iv)
+            }.getOrElse {
+                throw IllegalArgumentException("Incorrect password or corrupted steganography payload.")
+            }
+
+            return StegoDecodeResult(
+                message = String(decryptedBytes, Charsets.UTF_8),
+                isEncrypted = true
+            )
+        } else {
+            val plainBytes = reader.nextBytes(payloadLength)
+            return StegoDecodeResult(
+                message = String(plainBytes, Charsets.UTF_8),
+                isEncrypted = false
+            )
         }
     }
 

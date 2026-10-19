@@ -56,6 +56,12 @@ import androidx.compose.material.icons.filled.Science
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.TaskAlt
 import androidx.compose.material.icons.filled.TrendingUp
+import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.Transform
+import androidx.compose.material.icons.filled.EventRepeat
+import androidx.compose.material.icons.filled.RecordVoiceOver
+import androidx.compose.material.icons.filled.FormatQuote
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /**
@@ -107,6 +113,12 @@ val iconMap: Map<String, ImageVector> = mapOf(
     "TrendingDown"       to Icons.AutoMirrored.Filled.TrendingDown,
     "Visibility"         to Icons.Filled.Visibility,
     "GraphicEq"          to Icons.Filled.GraphicEq,
+    "Key"                to Icons.Filled.Key,
+    "Transform"          to Icons.Filled.Transform,
+    "EventRepeat"        to Icons.Filled.EventRepeat,
+    "RecordVoiceOver"    to Icons.Filled.RecordVoiceOver,
+    "FormatQuote"        to Icons.Filled.FormatQuote,
+    "Sort"               to Icons.AutoMirrored.Filled.Sort,
 
     // ── Categories ─────────────────────────────────────────────────────────
     "Build"              to Icons.Filled.Build,

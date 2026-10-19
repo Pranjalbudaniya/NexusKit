@@ -50,6 +50,18 @@ import com.nexuskit.app.feature.tools.sip_calculator.SipScreen
 import com.nexuskit.app.feature.tools.unit_converter.UnitConverterScreen
 import com.nexuskit.app.feature.tools.randomizer.RandomizerScreen
 import com.nexuskit.app.feature.tools.world_clock.WorldClockScreen
+import com.nexuskit.app.feature.tools.jwt_decoder.JwtScreen
+import com.nexuskit.app.feature.tools.json_converter.JsonConverterScreen
+import com.nexuskit.app.feature.tools.unix_timestamp.UnixTimestampScreen
+import com.nexuskit.app.feature.tools.cron_explainer.CronScreen
+import com.nexuskit.app.feature.tools.lorem_generator.LoremScreen
+import com.nexuskit.app.feature.tools.line_sorter.LineSorterScreen
+import com.nexuskit.app.feature.tools.fancy_text.FancyTextScreen
+import com.nexuskit.app.feature.tools.text_to_speech.TtsScreen
+import com.nexuskit.app.feature.tools.barcode_generator.BarcodeScreen
+import com.nexuskit.app.feature.tools.diceware_generator.DicewareScreen
+import com.nexuskit.app.feature.tools.gradient_generator.GradientScreen
+import com.nexuskit.app.feature.tools.totp_authenticator.TotpScreen
 
 /**
  * Root navigation host for the entire app.
@@ -339,6 +351,90 @@ fun NavGraph(
 
         composable(NavRoutes.TOOL_MARKDOWN_EDITOR) {
             MarkdownScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_JWT_DECODER) {
+            JwtScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_JSON_CONVERTER) {
+            JsonConverterScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_UNIX_TIMESTAMP) {
+            UnixTimestampScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_CRON_EXPLAINER) {
+            CronScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_LOREM_GENERATOR) {
+            LoremScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_LINE_SORTER) {
+            LineSorterScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_FANCY_TEXT) {
+            FancyTextScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_TEXT_TO_SPEECH) {
+            TtsScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_BARCODE_GENERATOR) {
+            BarcodeScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_DICEWARE_GENERATOR) {
+            DicewareScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_GRADIENT_GENERATOR) {
+            GradientScreen(
+                navController = navController,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(NavRoutes.TOOL_TOTP_AUTHENTICATOR) {
+            TotpScreen(
                 navController = navController,
                 onBack = { navController.popBackStack() }
             )
